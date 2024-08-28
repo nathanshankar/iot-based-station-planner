@@ -1,2 +1,2 @@
-# iot-based-station-planner
+# IoT based Path Planner 
 Novel idea of an IoT Dashboard that plans a path through charging stations based on the distance before discharge
