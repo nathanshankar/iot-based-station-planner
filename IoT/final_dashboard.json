@@ -1,0 +1,3396 @@
+[
+    {
+        "id": "ac670226a9584abc",
+        "type": "subflow",
+        "name": "Subflow 1",
+        "info": "",
+        "in": [],
+        "out": [
+            {
+                "x": 740,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "41273373a40b5543",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "97851a3085cf0e75",
+        "type": "file in",
+        "z": "ac670226a9584abc",
+        "name": "charging stations",
+        "filename": "/home/mscrobotics2324laptop14/Downloads/charging_stations_uk.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 390,
+        "y": 80,
+        "wires": [
+            [
+                "41273373a40b5543"
+            ]
+        ]
+    },
+    {
+        "id": "41273373a40b5543",
+        "type": "csv",
+        "z": "ac670226a9584abc",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "obj",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 610,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3767467f57e9faea",
+        "type": "inject",
+        "z": "ac670226a9584abc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 80,
+        "wires": [
+            [
+                "97851a3085cf0e75"
+            ]
+        ]
+    },
+    {
+        "id": "3f4fd13606ba137c",
+        "type": "subflow",
+        "name": "Subflow 2",
+        "info": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "e57b3b7e1647e625"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 400,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "939cb842b7f5c5d8",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "e57b3b7e1647e625",
+        "type": "delay",
+        "z": "3f4fd13606ba137c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "5",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "7ae16435f2dc8c09"
+            ]
+        ]
+    },
+    {
+        "id": "7ae16435f2dc8c09",
+        "type": "change",
+        "z": "3f4fd13606ba137c",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.lat",
+                "pt": "msg",
+                "to": "location.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "payload.lon",
+                "pt": "msg",
+                "to": "location.lon",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 120,
+        "wires": [
+            [
+                "939cb842b7f5c5d8"
+            ]
+        ]
+    },
+    {
+        "id": "939cb842b7f5c5d8",
+        "type": "openweathermap",
+        "z": "3f4fd13606ba137c",
+        "name": "",
+        "wtype": "current",
+        "lon": "",
+        "lat": "",
+        "city": "",
+        "country": "",
+        "language": "en",
+        "x": 230,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a4177a67e8704e1",
+        "type": "tab",
+        "label": "Final UAV Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1b24ad2f.198453",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "random point generator",
+        "func": "// create random position\nvar lat = 51 + Math.random() * 0.2;\nvar lon = -1.45 + Math.random() * 0.2;\nmsg.payload={\n    lat:lat, \n    lon:lon, \n    name:\"UAV1\", \n    icon:\"uav\", \n    color:\"#000\"};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 80,
+        "wires": [
+            [
+                "e0ec963913cbf7a9"
+            ]
+        ]
+    },
+    {
+        "id": "de3a90c8.8179c",
+        "type": "ui_button",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "",
+        "group": "cd81d08b.eebb3",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Move UAV",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "fa-male",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 550,
+        "y": 80,
+        "wires": [
+            [
+                "1b24ad2f.198453"
+            ]
+        ]
+    },
+    {
+        "id": "e0ec963913cbf7a9",
+        "type": "ui_worldmap",
+        "z": "2a4177a67e8704e1",
+        "group": "983409115f72e744",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "lat": "",
+        "lon": "",
+        "zoom": "",
+        "layer": "OSMC",
+        "cluster": "0",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "true",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "true",
+        "coords": "deg",
+        "showgrid": "true",
+        "allowFileDrop": "false",
+        "path": "/worldmap",
+        "overlist": "DR,CO,RA,DN,HM",
+        "maplist": "OSMC",
+        "mapname": "",
+        "mapurl": "",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 1180,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "de5c4044.d4e0f",
+        "type": "worldmap-tracks",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "depth": "5",
+        "layer": "combined",
+        "smooth": false,
+        "x": 990,
+        "y": 480,
+        "wires": [
+            [
+                "085dd0e0035eb286"
+            ]
+        ]
+    },
+    {
+        "id": "175cd74d21f0895c",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "UAV data",
+        "func": "// create random position\nvar lat = flow.get(\"currentlat\");\nvar lon = flow.get(\"currentlon\");\nvar speed = msg.payload.speed*18/5\nvar bearing = msg.payload.bearing\nmsg.payload={\n    lat:lat, \n    lon:lon, \n    bearing: bearing,\n    name:\"UAV\",\n    icon:\"uav\",\n    speed:speed,\n    color:\"#f00\"};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 480,
+        "wires": [
+            [
+                "de5c4044.d4e0f",
+                "085dd0e0035eb286"
+            ]
+        ]
+    },
+    {
+        "id": "8b10ba5111531b39",
+        "type": "comment",
+        "z": "2a4177a67e8704e1",
+        "name": "UAV Dashboarding - nathan",
+        "info": "-plot path ✅\n-set up charging stations\n-find closest charging stations\n-charge\n-battery modelling✅\n-soc and soh estimations\n-manual and automatic control\n-dashboard components\n-integration for multiple UAVs \n-weather based planning",
+        "x": 1640,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "2b795fb2262e15d0",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "battery percentage",
+        "func": "// Extract the start and stop coordinates from msg.payload\nvar startLat = msg.payload.start.lat;\nvar startLon = msg.payload.start.lon;\nvar stopLat = msg.payload.stop.lat;\nvar stopLon = msg.payload.stop.lon;\n\n// Constants\nvar R = 6371e3; // Earth radius in meters\nvar speedKmPerHour = 70; // Speed in km/h\nvar maxAcceleration = 10; // Maximum acceleration in m/s^2\nvar interval = 1000; // Interval in milliseconds (1 second)\nvar initialBattery = 100; // Initial battery percentage\nvar dischargeRate = 0.1; // Discharge rate in percentage per second\n\n// Convert degrees to radians\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\n\n// Haversine formula to calculate distance between two points\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\n// Calculate the total distance\nvar totalDistance = haversine(startLat, startLon, stopLat, stopLon);\n\n// Function to calculate speed at a given time\nfunction calculateSpeed(t, accelerationTime, decelerationTime, constantSpeedTime) {\n    if (t <= accelerationTime) {\n        // Accelerating phase\n        return maxAcceleration * t;\n    } else if (t <= (accelerationTime + constantSpeedTime)) {\n        // Constant speed phase\n        return speedKmPerHour * (1000 / 3600); // Convert km/h to m/s\n    } else if (t <= (accelerationTime + constantSpeedTime + decelerationTime)) {\n        // Decelerating phase\n        return maxAcceleration * (accelerationTime + constantSpeedTime + decelerationTime - t);\n    } else {\n        // End of the journey\n        return 0;\n    }\n}\n\n// Calculate the time required for each phase\nvar speedMetersPerSecond = speedKmPerHour * 1000 / 3600; // Convert km/h to m/s\nvar accelerationTime = speedMetersPerSecond / maxAcceleration; // Time to reach max speed\nvar accelerationDistance = 0.5 * maxAcceleration * accelerationTime * accelerationTime; // Distance covered during acceleration\nvar decelerationTime = accelerationTime; // Time to decelerate from max speed to 0\nvar decelerationDistance = accelerationDistance; // Distance covered during deceleration\nvar constantSpeedDistance = totalDistance - (accelerationDistance + decelerationDistance);\nvar constantSpeedTime = constantSpeedDistance / speedMetersPerSecond; // Time at constant speed\n\n// Function to calculate remaining battery percentage\nfunction calculateBattery(t) {\n    return Math.max(0, initialBattery - (t * dischargeRate));\n}\n\n// Calculate positions at intervals\nvar positions = [];\nvar totalTime = accelerationTime + constantSpeedTime + decelerationTime;\nvar timeStep = interval / 1000; // Time step in seconds\nvar currentTime = 0;\n\nwhile (currentTime <= totalTime) {\n    var battery = calculateBattery(currentTime);\n    positions.push({ battery: battery });\n    currentTime += timeStep;\n}\n\n// Function to publish battery status with delay\nvar i = 0;\nfunction publishBattery() {\n    if (i < positions.length) {\n        node.send({ payload: positions[i] });\n        i++;\n        setTimeout(publishBattery, interval); // Delay between each publish\n    } else {\n        // Send final battery message\n        node.send({ payload: { battery: calculateBattery(totalTime) } });\n    }\n}\n\n// Start publishing battery status\npublishBattery();\n\n// Return null to prevent immediate sending of the original message\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f58a7116cbcc44a8",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "group": "cd81d08b.eebb3",
+        "name": "",
+        "order": 3,
+        "width": "7",
+        "height": "9",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Drone Information</title>\n    <style>\n        .info-container {\n            background-color: #fff;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            text-align: center;\n            width: 300px;\n            margin: 20px auto;\n            /* Centering the container */\n        }\n\n        .info-container h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n        }\n\n        .info-item {\n            margin-bottom: 15px;\n        }\n\n        .info-label {\n            font-weight: bold;\n            display: block;\n            margin-bottom: 5px;\n        }\n\n        .info-value {\n            font-size: 18px;\n            display: inline-block;\n            margin-left: 5px;\n        }\n    </style>\n</head>\n\n<body ng-app=\"myApp\" ng-controller=\"myController\">\n    <div class=\"info-container\">\n        <h1>Drone Information</h1>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Duration to Target:</span>\n            <span class=\"info-value\" id=\"duration\">{{ msg.payload.timeToDestination.days }} days {{ msg.payload.timeToDestination.hours }} hours {{ msg.payload.timeToDestination.minutes }} minutes {{ msg.payload.timeToDestination.seconds }} seconds</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Distance Travelled (km):</span>\n            <span class=\"info-value\" id=\"distance-travelled\">{{ msg.payload.distanceTravelled }}</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Distance Remaining (km):</span>\n            <span class=\"info-value\" id=\"distance-remaining\">{{ msg.payload.remainingDistance }}</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Current Position:</span>\n            <span class=\"info-value\" id=\"duration\">{{ msg.payload.lat }} lat, {{ msg.payload.lon }} lon </span>\n        </div>\n    </div>\n\n    <!-- AngularJS Script -->\n    <script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js\"></script>\n    <script>\n        angular.module('myApp', [])\n            .controller('myController', function($scope) {\n                // Example payload values (replace with actual values from your application)\n                $scope.msg = {\n                    payload: {\n                        timeToDestination: {\n                            days: 0,\n                            hours: 0,\n                            minutes: 0,\n                            seconds: 0\n                        },\n                        distanceTravelled: 0,\n                        remainingDistance: 0\n                    }\n                };\n            });\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5b4d57cae267d87c",
+        "type": "ui_chart",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "21ad9c2888924593",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Drone speed (kmph)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1040,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9b156828fad4a8d9",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "speed",
+        "func": "// Create the new payload with separated coordinates\nmsg.payload = msg.payload.speed;\n\n// Return the modified message\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 560,
+        "wires": [
+            [
+                "5b4d57cae267d87c",
+                "cedfdc246f4f37e7",
+                "1b4837fae850f1a8"
+            ]
+        ]
+    },
+    {
+        "id": "f4e35ccfc7e12311",
+        "type": "ui_gauge",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "21ad9c2888924593",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Wind Speed",
+        "label": "m/s",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1010,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "938b7252189bce5c",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "wind speed",
+        "func": "// Create the new payload with separated coordinates\nmsg.payload = msg.payload.windspeed;\n\n// Return the modified message\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 600,
+        "wires": [
+            [
+                "f4e35ccfc7e12311"
+            ]
+        ]
+    },
+    {
+        "id": "cedfdc246f4f37e7",
+        "type": "ui_gauge",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "21ad9c2888924593",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Drone Speed",
+        "label": "kmph",
+        "format": "{{value | number:1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "40",
+        "seg2": "75",
+        "diff": false,
+        "className": "",
+        "x": 1010,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "c6fa13dd2657d1b3",
+        "type": "ui_form",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "label": "",
+        "group": "cd81d08b.eebb3",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Start",
+                "value": "start",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Stop",
+                "value": "stop",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "start": "",
+            "stop": ""
+        },
+        "payload": "",
+        "submit": "Plot UAV path",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": true,
+        "className": "",
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "51f34a8d1d968528"
+            ]
+        ]
+    },
+    {
+        "id": "26bb6f7cebb8cd6b",
+        "type": "ui_gauge",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "21ad9c2888924593",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Battery Percentage",
+        "label": "",
+        "format": "{{value | number:3}}%",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#00b500"
+        ],
+        "seg1": "20",
+        "seg2": "60",
+        "diff": false,
+        "className": "",
+        "x": 1090,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a51d5378f83c49ea",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "battery discharge",
+        "func": "// Constants\nvar batteryConsumptionRate = 3; // Battery consumption rate per km at base speed\nvar initialBatteryLevel = 100; // Initial battery level in percentage\n\n// Retrieve the current speed and distance from the message payload\nvar currentSpeed = msg.payload.speed;\nvar currentDistance = msg.payload.distanceTravelled;\n\n// Retrieve previous speed and distance from the context, or initialize them if not available\nvar previousSpeed = context.get('previousSpeed') || 0;\nvar previousDistance = context.get('previousDistance') || 0;\n\n// Calculate the differences\nvar speedDiff = currentSpeed - previousSpeed;\nvar distanceDiff = currentDistance - previousDistance;\n\n// Calculate battery consumption rate based on current speed\n// Assuming a linear relationship between speed and battery consumption\nvar batteryConsumption = (currentSpeed / 70) * batteryConsumptionRate;\n\n// Retrieve the current battery level from the context, or use the initial battery level if not provided\nvar batteryLevel = flow.get('batteryLevel')\n// Update battery level based on distance travelled and battery consumption rate\nbatteryLevel = batteryLevel - (distanceDiff * batteryConsumption);\nif (batteryLevel < 0){\n    batteryLevel=0\n}\n\n// Ensure battery level does not drop below 0\n\n\n// Store the current speed and distance in the context for future use\ncontext.set('previousSpeed', currentSpeed);\ncontext.set('previousDistance', currentDistance);\ncontext.set('batteryLevel', batteryLevel);\n\n// Update the payload with the new battery level\nmsg.payload = batteryLevel;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 420,
+        "wires": [
+            [
+                "26bb6f7cebb8cd6b",
+                "ba66398c67a84164"
+            ]
+        ]
+    },
+    {
+        "id": "3b57ae7a8668ec3e",
+        "type": "subflow:3f4fd13606ba137c",
+        "z": "2a4177a67e8704e1",
+        "name": "weather data",
+        "x": 690,
+        "y": 600,
+        "wires": [
+            [
+                "938b7252189bce5c",
+                "8891eecd68c9faa2"
+            ]
+        ]
+    },
+    {
+        "id": "d25498e0a570eb4a",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "tableData",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "batteryLevelT",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "batteryLevelT1",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "travelData",
+                "pt": "flow"
+            },
+            {
+                "t": "set",
+                "p": "startpos",
+                "pt": "flow",
+                "to": "payload.start",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "start",
+                "pt": "flow",
+                "to": "payload.start",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "endpos",
+                "pt": "flow",
+                "to": "payload.stop",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "currentlat",
+                "pt": "flow",
+                "to": "startpos.lat",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "currentlon",
+                "pt": "flow",
+                "to": "startpos.lon",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "batteryLevel",
+                "pt": "flow",
+                "to": "100",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "reached",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "tableData[0].point",
+                "pt": "flow",
+                "to": "start",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "tableData[0].lat",
+                "pt": "flow",
+                "to": "payload.start.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tableData[0].lon",
+                "pt": "flow",
+                "to": "payload.start.lon",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tableData[0].charge",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "tableData[1].point",
+                "pt": "flow",
+                "to": "end",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "tableData[1].lat",
+                "pt": "flow",
+                "to": "payload.stop.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tableData[1].lon",
+                "pt": "flow",
+                "to": "payload.stop.lon",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "tableData[1].charge",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "previousDistances",
+                "pt": "flow"
+            },
+            {
+                "t": "set",
+                "p": "currentLoc",
+                "pt": "flow",
+                "to": "startpos",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "reset",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "wind.speed",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "wind.direction",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].point",
+                "pt": "flow",
+                "to": "start",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].lat",
+                "pt": "flow",
+                "to": "payload.start.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].lon",
+                "pt": "flow",
+                "to": "payload.start.lon",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].duration",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].avgspeed",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "travelData[0].distance",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 240,
+        "wires": [
+            [
+                "0a39f028a6648c82",
+                "8c955d2ccb02b28e"
+            ]
+        ]
+    },
+    {
+        "id": "f365390ca32b4d3e",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "currentlat",
+                "pt": "flow",
+                "to": "payload.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "currentlon",
+                "pt": "flow",
+                "to": "payload.lon",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "currentLoc.lat",
+                "pt": "flow",
+                "to": "payload.lat",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "currentLoc.lon",
+                "pt": "flow",
+                "to": "payload.lon",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "currentSpeed",
+                "pt": "flow",
+                "to": "payload.speed",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "startpos",
+                "pt": "flow",
+                "to": "payload.Itinerary.start",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "endpos",
+                "pt": "flow",
+                "to": "payload.Itinerary.end",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "distance",
+                "pt": "flow",
+                "to": "payload.Itinerary.distance",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "51f34a8d1d968528",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "Lat and Lon",
+        "func": "// Extract the payload\nvar payload = msg.payload;\n\n// Split the start coordinates\nvar startCoords = payload.start.split(',');\nvar startLat = parseFloat(startCoords[0].trim());\nvar startLon = parseFloat(startCoords[1].trim());\n\n// Split the stop coordinates\nvar stopCoords = payload.stop.split(',');\nvar stopLat = parseFloat(stopCoords[0].trim());\nvar stopLon = parseFloat(stopCoords[1].trim());\n\n// Create the new payload with separated coordinates\nmsg.payload = {\n    start: {\n        lat: startLat,\n        lon: startLon\n    },\n    stop: {\n        lat: stopLat,\n        lon: stopLon\n    }\n};\n\n// Return the modified message\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 200,
+        "wires": [
+            [
+                "2b795fb2262e15d0",
+                "d25498e0a570eb4a"
+            ]
+        ]
+    },
+    {
+        "id": "b7458c18e966981e",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "path plotting function 1",
+        "func": "// Delay function to send the start coordinates first\nif(flow.get(\"reached\")==false){\nsetTimeout(function () {\n    // Create message for start coordinates\n    // Extract the start and stop coordinates from msg.payload\n    var start = flow.get(\"startpos\");\n    var stop = flow.get(\"endpos\")\n    var startLat = start.lat;\n    var startLon = start.lon;\n    var stopLat = stop.lat;\n    var stopLon = stop.lon;\n\n    var msgStart = {\n        payload: {\n            lat: startLat,\n            lon: startLon\n        }\n    };\n\n    // Send start message\n    node.send(msgStart);\n\n    // Delay function to send the stop coordinates after 1.4 seconds\n    setTimeout(function () {\n        // Create message for stop coordinates\n        var msgStop = {\n            payload: {\n                lat: stopLat,\n                lon: stopLon\n            }\n        };\n\n        // Send stop message\n        node.send(msgStop);\n    }, 5000);\n\n}, 1000); // Start sending immediately\n\n// Return null to prevent immediate sending of the original message\nreturn null;}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 180,
+        "wires": [
+            [
+                "774462a9e2e3b87a"
+            ]
+        ]
+    },
+    {
+        "id": "07aefac10fc78c60",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "path plotting function 2",
+        "func": "// Extract the start and stop coordinates from msg.payload\nvar start = flow.get(\"startpos\");\nvar stop = flow.get(\"endpos\")\nvar startLat = start.lat;\nvar startLon = start.lon;\nvar stopLat = stop.lat;\nvar stopLon = stop.lon;\n\nif (flow.get(\"reached\") == false) {\nfunction sendCoordinates() {\n    // Create message for start coordinates\n    var msgStart = {\n        payload: {\n            lat: startLat,\n            lon: startLon\n        }\n    };\n\n    // Send start message\n    node.send(msgStart);\n\n    // Delay function to send the stop coordinates after 5 seconds\n    setTimeout(function () {\n        // Create message for stop coordinates\n        var msgStop = {\n            payload: {\n                lat: stopLat,\n                lon: stopLon\n            }\n        };\n\n        // Send stop message\n        node.send(msgStop);\n    }, 5000);\n}\n\n// Set up an interval to run the sendCoordinates function every 10 minutes\nsetInterval(sendCoordinates, 600000);\n\n// Return null to prevent immediate sending of the original message\nreturn null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 220,
+        "wires": [
+            [
+                "774462a9e2e3b87a"
+            ]
+        ]
+    },
+    {
+        "id": "78dfb92efdd75068",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "distance from start to end",
+        "func": "// Extract the start and stop coordinates from msg.payload\nvar start = flow.get(\"startpos\");\nvar stop = flow.get(\"endpos\");\nvar lat1 = start.lat;\nvar lon1 = start.lon;\nvar lat2 = stop.lat;\nvar lon2 = stop.lon;\n\n// Convert degrees to radians\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\n\n// Convert radians to degrees\nfunction toDegrees(radians) {\n    return radians * 180 / Math.PI;\n}\n\n// Haversine formula\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var R = 6371e3; // Earth radius in meters\n\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\n// Bearing formula\nfunction calculateBearing(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var y = Math.sin(Δλ) * Math.cos(φ2);\n    var x = Math.cos(φ1) * Math.sin(φ2) -\n        Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);\n\n    var θ = Math.atan2(y, x);\n    var bearing = (toDegrees(θ) + 360) % 360; // Normalize to 0-360 degrees\n    return bearing;\n}\nif (flow.get(\"reached\") == false) {\n// Calculate distance\nvar distance = haversine(lat1, lon1, lat2, lon2);\n\n// Calculate bearing\nvar bearing = calculateBearing(lat1, lon1, lat2, lon2);\n\n// Create message with distance and bearing\nmsg.payload = {\n    start: {\n        lat: lat1,\n        lon: lon1\n    },\n    stop: {\n        lat: lat2,\n        lon: lon2\n    },\n    distance: distance, // distance in meters\n    bearing: bearing // bearing in degrees\n};\n\n// Return the modified message\nreturn msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 260,
+        "wires": [
+            [
+                "90f2b67c37d50643",
+                "2738742e2aeca165"
+            ]
+        ]
+    },
+    {
+        "id": "2738742e2aeca165",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "distance",
+                "pt": "flow",
+                "to": "payload.distance",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "bearing",
+                "pt": "flow",
+                "to": "payload.bearing",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "90f2b67c37d50643",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "group": "cd81d08b.eebb3",
+        "name": "",
+        "order": 4,
+        "width": "7",
+        "height": "7",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Itinerary Information</title>\n    <style>\n        .info-container {\n            background-color: #fff;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            text-align: center;\n            width: 300px;\n            margin: 20px auto;\n        }\n\n        .info-container h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n        }\n\n        .info-item {\n            margin-bottom: 15px;\n        }\n\n        .info-label {\n            font-weight: bold;\n            display: block;\n            margin-bottom: 5px;\n        }\n\n        .info-value {\n            font-size: 18px;\n            display: inline-block;\n            margin-left: 5px;\n        }\n    </style>\n</head>\n\n<body ng-app=\"myApp\" ng-controller=\"myController\">\n    <div class=\"info-container\">\n        <h1>Itinerary Information</h1>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Start Point:</span>\n            <span class=\"info-value\" id=\"start-point\">{{ msg.payload.segments[currentSegment].start.lat }} lat, {{ msg.payload.segments[currentSegment].start.lon }} lon</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">End Point:</span>\n            <span class=\"info-value\" id=\"end-point\">{{ msg.payload.segments[currentSegment].end.lat }} lat, {{ msg.payload.segments[currentSegment].end.lon }} lon</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Total Distance (km):</span>\n            <span class=\"info-value\" id=\"distance\">{{ msg.payload.segments[currentSegment].distance / 1000 }}</span>\n        </div>\n    </div>\n\n    <!-- AngularJS Script -->\n    <script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js\"></script>\n    <script>\n        angular.module('myApp', [])\n            .controller('myController', function($scope) {\n                // Example payload values (replace with actual values from your application)\n                $scope.msg = {\n                    payload: {\n                        segments: [\n                            {\n                                start: {\n                                    lat: 37.7749,\n                                    lon: -122.4194\n                                },\n                                end: {\n                                    lat: 34.0522,\n                                    lon: -118.2437\n                                },\n                                distance: 560000 // distance in meters\n                            }\n                        ]\n                    }\n                };\n\n                // Assuming currentSegment is always 0 for this example\n                $scope.currentSegment = 0;\n            });\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 880,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "774462a9e2e3b87a",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "destination data",
+        "func": "// create random position\nvar lat = msg.payload.lat\nvar lon = msg.payload.lon\nmsg.payload={\n    lat:lat, \n    lon:lon, \n    name:\"destination\",  \n    color:\"#000\"};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 160,
+        "wires": [
+            [
+                "f797e7277ecd93c7",
+                "f4639620844443fd"
+            ]
+        ]
+    },
+    {
+        "id": "f797e7277ecd93c7",
+        "type": "worldmap-tracks",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "depth": "2",
+        "layer": "combined",
+        "smooth": false,
+        "x": 890,
+        "y": 120,
+        "wires": [
+            [
+                "f4639620844443fd"
+            ]
+        ]
+    },
+    {
+        "id": "94f65f775d8619f0",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "filtered station list",
+        "func": "// Haversine function to calculate the distance between two coordinates\nvar start = flow.get(\"currentLoc\");\nvar stop = flow.get(\"endpos\")\nvar startLat = start.lat;\nvar startLon = start.lon;\nvar endLat = stop.lat;\nvar endLon = stop.lon;\nfunction haversine(lat1, lon1, lat2, lon2) {\n    function toRad(x) {\n        return x * Math.PI / 180;\n    }\n\n    var R = 6371; // Radius of the Earth in kilometers\n    var dLat = toRad(lat2 - lat1);\n    var dLon = toRad(lon1 - lon2);\n    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    var d = R * c;\n    return d;\n}\n\n// Function to calculate the perpendicular distance from a point to a line segment\nfunction perpendicularDistance(lat1, lon1, lat2, lon2, lat3, lon3) {\n    function toRad(x) {\n        return x * Math.PI / 180;\n    }\n\n    var R = 6371; // Radius of the Earth in kilometers\n    var φ1 = toRad(lat1);\n    var λ1 = toRad(lon1);\n    var φ2 = toRad(lat2);\n    var λ2 = toRad(lon2);\n    var φ3 = toRad(lat3);\n    var λ3 = toRad(lon3);\n\n    var y = Math.sin(λ3 - λ1) * Math.cos(φ3);\n    var x = Math.cos(φ1) * Math.sin(φ3) - Math.sin(φ1) * Math.cos(φ3) * Math.cos(λ3 - λ1);\n    var θ1 = Math.atan2(y, x);\n\n    y = Math.sin(λ2 - λ1) * Math.cos(φ2);\n    x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1);\n    var θ2 = Math.atan2(y, x);\n\n    var angle = Math.abs(θ2 - θ1);\n    if (angle > Math.PI) angle = 2 * Math.PI - angle;\n\n    var d13 = haversine(lat1, lon1, lat3, lon3);\n\n    return d13 * Math.sin(angle);\n}\n\n// Function to calculate the projection of point p3 onto the line defined by points p1 and p2\nfunction projectionFactor(lat1, lon1, lat2, lon2, lat3, lon3) {\n    function toRad(x) {\n        return x * Math.PI / 180;\n    }\n\n    var φ1 = toRad(lat1);\n    var λ1 = toRad(lon1);\n    var φ2 = toRad(lat2);\n    var λ2 = toRad(lon2);\n    var φ3 = toRad(lat3);\n    var λ3 = toRad(lon3);\n\n    var y = Math.sin(λ3 - λ1) * Math.cos(φ3);\n    var x = Math.cos(φ1) * Math.sin(φ3) - Math.sin(φ1) * Math.cos(φ3) * Math.cos(λ3 - λ1);\n    var θ1 = Math.atan2(y, x);\n\n    y = Math.sin(λ2 - λ1) * Math.cos(φ2);\n    x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1);\n    var θ2 = Math.atan2(y, x);\n\n    var angle = θ2 - θ1;\n    var d12 = haversine(lat1, lon1, lat2, lon2);\n    var d13 = haversine(lat1, lon1, lat3, lon3);\n\n    return (d13 * Math.cos(angle)) / d12;\n}\n\n// Check if station data is already stored in context\n\nvar storedStations = context.get('stations');\nif (!storedStations) {\n    // Coordinates to compare against\n\n    // Get the array of station objects from msg.paths.path_2\n    var stations = flow.get(\"fullstationlist\");\n\n    // Ensure coordinates are defined\n    if (typeof startLat === 'undefined' || typeof startLon === 'undefined' || typeof endLat === 'undefined' || typeof endLon === 'undefined') {\n        node.error(\"Coordinates are undefined\", msg);\n        return null;\n    }\n\n    // Ensure stations is an array\n    if (!Array.isArray(stations)) {\n        node.error(\"Input payload is not an array\", msg);\n        return null;\n    }\n\n    // Store the fetched station data in context for future use\n    context.set('stations', stations);\n    storedStations = stations; // Update storedStations for further processing\n}\n\n// Ensure storedStations is an array before processing\nif (!Array.isArray(storedStations)) {\n    node.error(\"Stored stations data is not an array\", msg);\n    return null;\n}\n\n\n// Initialize an array to hold the filtered points\nvar filteredPoints = [];\n\n\n// Iterate over the array of stations\nfor (var i = 0; i < storedStations.length; i++) {\n    var point = storedStations[i];\n\n    // Ensure point has lat and lon properties\n    if (typeof point.lat === 'undefined' || typeof point.lon === 'undefined') {\n        node.error(\"Station point is missing lat or lon\", msg);\n        continue; // Skip this station and move to the next\n    }\n\n    // Calculate the projection factor to check if the point lies within the segment bounds\n    var projection = projectionFactor(startLat, startLon, endLat, endLon, point.lat, point.lon);\n\n    // Discard points before the start point and beyond the end point\n    if (projection < 0 || projection > 1) {\n        continue;\n    }\n\n    // Calculate the perpendicular distance from the point to the line segment\n    var distance = perpendicularDistance(startLat, startLon, endLat, endLon, point.lat, point.lon);\n\n    if (distance < 20) { // Check if within 15 km\n        // Embed the distance into the point object\n        point.distance = distance;\n        filteredPoints.push(point);\n    }\n}\n\n// Set the filtered points as the payload to pass to the next node\nmsg.payload.filteredstation = filteredPoints;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 660,
+        "wires": [
+            [
+                "5ff5d7d91182078f"
+            ]
+        ]
+    },
+    {
+        "id": "5ff5d7d91182078f",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "stationlist",
+                "pt": "flow",
+                "to": "payload.filteredstation",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bf99dbf31e5d6210",
+        "type": "subflow:ac670226a9584abc",
+        "z": "2a4177a67e8704e1",
+        "name": "charging stations list",
+        "x": 170,
+        "y": 620,
+        "wires": [
+            [
+                "93c1545b.dca6f8"
+            ]
+        ]
+    },
+    {
+        "id": "93c1545b.dca6f8",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "fullstationlist",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fullstationlist",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1f96f95b7a928c20",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "near uav stations",
+        "func": "// Check if msg.payload is defined and is an array\nif (msg.payload && Array.isArray(msg.payload)) {\n    // Initialize an array to store processed payloads\n    var processedPayloads = [];\n\n    // Iterate through each item in msg.payload\n    for (var i = 0; i < msg.payload.length; i++) {\n        // Extract lat, lon, and id from each item\n        var lat = msg.payload[i].lat;\n        var lon = msg.payload[i].lon;\n        var id = msg.payload[i].id;\n\n        // Check if lat is defined (assuming lat is crucial for processing)\n        if (lat !== undefined) {\n            // Create a new payload object\n            var newPayload = {\n                lat: lat,\n                lon: lon,\n                name: \"Station \" + id,\n                icon: \":battery:\",\n                color: \"#000\"\n            };\n\n            // Push the new payload object to the array of processed payloads\n            processedPayloads.push(newPayload);\n        } else {\n            // Log an error message if lat is undefined for this item\n            console.error(\"Error: msg.payload[\" + i + \"].lat is undefined\");\n            // Optionally, you can set default values or handle the error case here\n            // For example:\n            // var defaultPayload = { lat: 0, lon: 0, name: \"Default UAV\", icon: \"\", color: \"#000\" };\n            // processedPayloads.push(defaultPayload);\n        }\n    }\n\n    // Assign the array of processed payloads back to msg.payload\n    msg.payload = processedPayloads;\n} else {\n    // Handle the case where msg.payload is not defined or not an array\n    console.error(\"Error: msg.payload is not defined or is not an array\");\n    // Optionally, set default values or handle the error case here\n    // For example:\n    // msg.payload = [{ lat: 0, lon: 0, name: \"Default UAV\", icon: \"\", color: \"#000\" }];\n}\n\n// Return the modified msg object\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 720,
+        "wires": [
+            [
+                "9be7b64076193a77"
+            ]
+        ]
+    },
+    {
+        "id": "907a66f8542ff655",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "stations near uav",
+        "func": "// Haversine function to calculate the distance between two coordinates\nfunction haversine(lat1, lon1, lat2, lon2) {\n    function toRad(x) {\n        return x * Math.PI / 180;\n    }\n\n    var R = 6371; // Radius of the Earth in kilometers\n    var dLat = toRad(lat2 - lat1);\n    var dLon = toRad(lon1 - lon2);\n    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    var d = R * c;\n    return d;\n}\n\n// Check if station data is already stored in context\nvar storedStations = context.get('stations');\nif (!storedStations) {\n    // Coordinates to compare against\n    var refLat = flow.get(\"currentlat\");\n    var refLon = flow.get(\"currentlon\");\n\n    // Get the array of station objects from msg.payload\n    var stations = flow.get(\"fullstationlist\");\n\n    // Ensure refLat and refLon are defined\n    if (typeof refLat === 'undefined' || typeof refLon === 'undefined') {\n        node.error(\"UAV coordinates are undefined\", msg);\n        return null;\n    }\n\n    // Ensure stations is an array\n    if (!Array.isArray(stations)) {\n        node.error(\"Input payload is not an array\", msg);\n        return null;\n    }\n\n    // Store the fetched station data in context for future use\n    context.set('stations', stations);\n    storedStations = stations; // Update storedStations for further processing\n}\n\n// Ensure storedStations is an array before processing\nif (!Array.isArray(storedStations)) {\n    node.error(\"Stored stations data is not an array\", msg);\n    return null;\n}\n\n// Coordinates to compare against (from stored data)\nvar refLat = flow.get(\"currentlat\");\nvar refLon = flow.get(\"currentlon\");\n\n// Initialize an array to hold the filtered points\nvar filteredPoints = [];\n\n// Iterate over the array of stations\nfor (var i = 0; i < storedStations.length; i++) {\n    var point = storedStations[i];\n\n    // Ensure point has lat and lon properties\n    if (typeof point.lat === 'undefined' || typeof point.lon === 'undefined') {\n        node.error(\"Station point is missing lat or lon\", msg);\n        continue; // Skip this station and move to the next\n    }\n\n    var distance = haversine(refLat, refLon, point.lat, point.lon);\n    if (distance < 10) {\n        // Embed the distance into the point object\n        point.distance = distance;\n        filteredPoints.push(point);\n    }\n}\n\n// Set the filtered points as the payload to pass to the next node\nmsg.payload = filteredPoints;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 720,
+        "wires": [
+            [
+                "1f96f95b7a928c20",
+                "71eb4be21d61bc39"
+            ]
+        ]
+    },
+    {
+        "id": "c6c8b6af0a9833a1",
+        "type": "ui_table",
+        "z": "2a4177a67e8704e1",
+        "group": "bf2a2839ae2fcfd2",
+        "name": "Stations Near the UAV",
+        "order": 2,
+        "width": "6",
+        "height": "3",
+        "columns": [],
+        "outputs": 1,
+        "cts": true,
+        "x": 800,
+        "y": 800,
+        "wires": [
+            [
+                "73a32b2441b46215",
+                "d1aa56d0094d4871",
+                "e3368a5da5cd52e0"
+            ]
+        ]
+    },
+    {
+        "id": "71eb4be21d61bc39",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "available stations",
+        "func": "var payload = msg.payload;\n\n// Filter out the entries where 'occ' is not 1\nvar filtered_payload = payload.filter(function (entry) {\n    return entry.occ != 1;\n});\n\nmsg.payload = filtered_payload;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 800,
+        "wires": [
+            [
+                "c6c8b6af0a9833a1"
+            ]
+        ]
+    },
+    {
+        "id": "73a32b2441b46215",
+        "type": "ui_text",
+        "z": "2a4177a67e8704e1",
+        "group": "bf2a2839ae2fcfd2",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Selected Station",
+        "format": "{{msg.payload.id}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1020,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "03400c5fb2002eb0",
+        "type": "ui_button",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "bf2a2839ae2fcfd2",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Manual Select",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "navigate_to",
+        "payloadType": "flow",
+        "topic": "navigatepos",
+        "topicType": "msg",
+        "x": 1380,
+        "y": 740,
+        "wires": [
+            [
+                "549fe04f8f29bf8c",
+                "8569d720dade6f90"
+            ]
+        ]
+    },
+    {
+        "id": "455bad58b8474ea4",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "stations",
+        "func": "// Haversine function to calculate the distance between two coordinates\nfunction haversine(lat1, lon1, lat2, lon2) {\n    function toRad(x) {\n        return x * Math.PI / 180;\n    }\n\n    var R = 6371; // Radius of the Earth in kilometers\n    var dLat = toRad(lat2 - lat1);\n    var dLon = toRad(lon2 - lon1);\n    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    var d = R * c;\n    return d;\n}\n\n// Check if station data is already stored in context\nvar storedStations = flow.get(\"stationlist\");\nif (!storedStations) {\n    node.error(\"Station data is not available\", msg);\n    return null;\n}\n\n// Ensure storedStations is an array before processing\nif (!Array.isArray(storedStations)) {\n    node.error(\"Stored stations data is not an array\", msg);\n    return null;\n}\n\n// Coordinates to compare against (from stored data)\nvar refLat = flow.get(\"currentlat\");\nvar refLon = flow.get(\"currentlon\");\nvar maxDistance = flow.get(\"distance\");\n\nif (typeof refLat === 'undefined' || typeof refLon === 'undefined' || typeof maxDistance === 'undefined') {\n    node.error(\"Current location or distance limit is undefined\", msg);\n    return null;\n}\n\n// Initialize an array to hold the filtered points\nvar filteredPoints = [];\n\n// Iterate over the array of stations\nfor (var i = 0; i < storedStations.length; i++) {\n    var point = storedStations[i];\n\n    // Ensure point has lat and lon properties\n    if (typeof point.lat === 'undefined' || typeof point.lon === 'undefined') {\n        node.error(\"Station point is missing lat or lon\", msg);\n        continue; // Skip this station and move to the next\n    }\n\n    var distance = haversine(refLat, refLon, point.lat, point.lon);\n    // Embed the distance into the point object\n    if (distance < maxDistance) {\n        // Embed the distance into the point object\n        point.distance = distance;\n        filteredPoints.push(point);\n    }\n}\n\n// Sort filtered points based on distance\nfilteredPoints.sort((a, b) => a.distance - b.distance);\n\n// Set the filtered and sorted points as the payload to pass to the next node\nmsg.payload = filteredPoints;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 880,
+        "wires": [
+            [
+                "5b7f815740039a01",
+                "03b02610d01ba089"
+            ]
+        ]
+    },
+    {
+        "id": "5b7f815740039a01",
+        "type": "ui_table",
+        "z": "2a4177a67e8704e1",
+        "group": "bf2a2839ae2fcfd2",
+        "name": "Stations on the way",
+        "order": 4,
+        "width": "6",
+        "height": "4",
+        "columns": [],
+        "outputs": 1,
+        "cts": true,
+        "x": 790,
+        "y": 880,
+        "wires": [
+            [
+                "73a32b2441b46215",
+                "ab185820a031b92a",
+                "e3368a5da5cd52e0"
+            ]
+        ]
+    },
+    {
+        "id": "03b02610d01ba089",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "on the way stations",
+        "func": "// Retrieve stationlist from flow context\nvar stationlist = flow.get('stationlist');\n\n// Check if stationlist is defined and is an array\nif (stationlist && Array.isArray(stationlist)) {\n    // Initialize an array to store processed payloads\n    var processedPayloads = [];\n\n    // Iterate through each item in stationlist\n    for (var i = 0; i < stationlist.length; i++) {\n        // Extract lat, lon, and id from each item\n        var lat = stationlist[i].lat;\n        var lon = stationlist[i].lon;\n        var id = stationlist[i].id;\n\n        // Check if lat is defined (assuming lat is crucial for processing)\n        if (lat !== undefined) {\n            // Create a new payload object\n            var newPayload = {\n                lat: lat,\n                lon: lon,\n                name: \"Station \" + id,\n                icon: \":battery:\",\n                color: \"#000\"\n            };\n\n            // Push the new payload object to the array of processed payloads\n            processedPayloads.push(newPayload);\n        } else {\n            // Log an error message if lat is undefined for this item\n            console.error(\"Error: stationlist[\" + i + \"].lat is undefined\");\n            // Optionally, you can set default values or handle the error case here\n            // For example:\n            // var defaultPayload = { lat: 0, lon: 0, name: \"Default UAV\", icon: \"\", color: \"#000\" };\n            // processedPayloads.push(defaultPayload);\n        }\n    }\n\n    // Assign the array of processed payloads to msg.payload\n    msg.payload = processedPayloads;\n} else {\n    // Handle the case where stationlist is not defined or not an array\n    console.error(\"Error: stationlist is not defined or is not an array\");\n    // Optionally, set default values or handle the error case here\n    // For example:\n    // msg.payload = [{ lat: 0, lon: 0, name: \"Default UAV\", icon: \"\", color: \"#000\" }];\n}\n\n// Return the modified msg object\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 880,
+        "wires": [
+            [
+                "90df27b3f056bb5b"
+            ]
+        ]
+    },
+    {
+        "id": "5db9d049a690fc24",
+        "type": "delay",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 350,
+        "y": 760,
+        "wires": [
+            [
+                "907a66f8542ff655",
+                "455bad58b8474ea4"
+            ]
+        ]
+    },
+    {
+        "id": "d1aa56d0094d4871",
+        "type": "ui_text",
+        "z": "2a4177a67e8704e1",
+        "group": "bf2a2839ae2fcfd2",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Stations Near the UAV",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 800,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "ab185820a031b92a",
+        "type": "ui_text",
+        "z": "2a4177a67e8704e1",
+        "group": "bf2a2839ae2fcfd2",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Stations on the way",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 790,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "ba66398c67a84164",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "batteryLevel",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1180,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "estimateDistance",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "Estimate Remaining Distance",
+        "func": "// Constants\nvar targetBatteryLevel = 10; // Target battery level in percentage (10%)\n\n// Retrieve the current speed and battery levels from the flow context\nvar currentSpeed = flow.get('currentSpeed'); // Speed in km/h\nvar batteryLevelT = flow.get('batteryLevel'); // Current battery level in percentage\nvar batteryLevelT1 = flow.get('batteryLevelT1'); // Previous battery level in percentage\nvar interval = 1000; // Interval in milliseconds (e.g., 1000 ms or 1 second)\n\n// Check if batteryLevelT1 is undefined or currentSpeed is undefined\nif (batteryLevelT1 === undefined || batteryLevelT === undefined || currentSpeed === undefined) {\n    // If batteryLevelT1 is not set, initialize it with the current battery level\n    if (batteryLevelT1 === undefined) {\n        flow.set('batteryLevelT1', batteryLevelT);\n    }\n    return null; // Wait for the next interval to get the next battery level\n}\n\n// Convert current speed from km/h to m/s\nvar currentSpeedMetersPerSecond = currentSpeed * 1000 / 3600;\n\n// Calculate the battery discharge rate per second\nvar dischargeRatePerSecond = (batteryLevelT1 - batteryLevelT) / (interval / 1000);\n\n// Ensure discharge rate is positive\nif (dischargeRatePerSecond <= 0) {\n    msg.payload = \"Battery level is not decreasing or increasing.\";\n    return msg;\n}\n\n// Estimate the remaining time until battery reaches 10%\nvar remainingBattery = batteryLevelT - targetBatteryLevel;\nif (remainingBattery <= 0) {\n    msg.payload = \"Battery level is already at or below the target level.\";\n    return msg;\n}\nvar remainingTimeSeconds = remainingBattery / dischargeRatePerSecond;\n\n// Estimate the distance that can be traveled with the remaining battery\nvar remainingDistanceMeters = currentSpeedMetersPerSecond * remainingTimeSeconds;\nvar remainingDistanceKm = remainingDistanceMeters / 1000; // Convert to km\n\n// Convert remaining time to minutes and seconds\nvar remainingTimeMinutes = Math.floor(remainingTimeSeconds / 60);\nvar remainingTimeSecs = Math.floor(remainingTimeSeconds % 60);\n\n// Update the flow context for the next interval\nflow.set('batteryLevelT1', batteryLevelT); // Update the previous battery level\n\n// Prepare the payload with remaining time and distance\nmsg.payload = {\n    time: {\n        remainingTimeMinutes: remainingTimeMinutes,\n        remainingTimeSeconds: remainingTimeSecs\n    },\n    distance: remainingDistanceKm\n};\n\n// Store the calculated distance in the flow context\nvar previousDistances = flow.get('previousDistances') || [];\npreviousDistances.push(remainingDistanceKm);\nflow.set('previousDistances', previousDistances);\n\nflow.set(\"soc\", msg.payload);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 640,
+        "wires": [
+            [
+                "62a2ac7813907461",
+                "310b569a5f452504",
+                "8877ae95b37ec60b"
+            ]
+        ]
+    },
+    {
+        "id": "62a2ac7813907461",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "group": "07a538afbb49a06b",
+        "name": "",
+        "order": 3,
+        "width": "6",
+        "height": "7",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Battery Information</title>\n    <style>\n        .info-container {\n            background-color: #fff;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            text-align: center;\n            width: 300px;\n            margin: 20px auto;\n            /* Centering the container */\n        }\n\n        .info-container h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n        }\n\n        .info-item {\n            margin-bottom: 15px;\n        }\n\n        .info-label {\n            font-weight: bold;\n            display: block;\n            margin-bottom: 5px;\n        }\n\n        .info-value {\n            font-size: 18px;\n            display: inline-block;\n            margin-left: 5px;\n        }\n    </style>\n</head>\n\n<body ng-app=\"myApp\" ng-controller=\"myController\">\n    <div class=\"info-container\">\n        <h1>Drone Information</h1>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Charge Left:</span>\n            <span class=\"info-value\" id=\"duration\">{{ msg.payload.time.remainingTimeMinutes }} minutes {{ msg.payload.time.remainingTimeSeconds }} seconds</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Distance on current charge (km):</span>\n            <span class=\"info-value\" id=\"distance-travelled\">{{ msg.payload.distance }}</span>\n        </div>\n    </div>\n\n    <!-- AngularJS Script -->\n    <script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js\"></script>\n    <script>\n        angular.module('myApp', [])\n            .controller('myController', function($scope) {\n                // Example payload values (replace with actual values from your application)\n                $scope.msg = {\n                    payload: {\"time\":{\"remainingTimeMinutes\":0,\"remainingTimeSeconds\":0},\"distance\":0}\n                };\n            });\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1120,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5594545384d9f6fe",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "navigate_to",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1370,
+        "y": 700,
+        "wires": [
+            [
+                "03400c5fb2002eb0"
+            ]
+        ]
+    },
+    {
+        "id": "549fe04f8f29bf8c",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "startpos.lat",
+                "pt": "flow",
+                "to": "currentlat",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "startpos.lon",
+                "pt": "flow",
+                "to": "currentlon",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "endpos",
+                "pt": "flow",
+                "to": "navigate_to",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1560,
+        "y": 740,
+        "wires": [
+            [
+                "9b1edf5dcf550952"
+            ]
+        ]
+    },
+    {
+        "id": "c7147e670387d3ca",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "gradual path ",
+        "func": "// Extract the start and stop coordinates from msg.payload\nvar start = flow.get(\"startpos\") || { lat: 0, lon: 0 };\nvar stop = flow.get(\"endpos\") || { lat: 0, lon: 0 };\nvar startLat = start.lat;\nvar startLon = start.lon;\nvar stopLat = stop.lat;\nvar stopLon = stop.lon;\nvar battery = flow.get(\"batteryLevel\");\n\n// Extract wind data from weather report\nvar windSpeed = msg.payload.windspeed || 0; // in m/s\nvar windDirection = msg.payload.winddirection || 0; // in meteorological degrees\n\n// Constants\nvar R = 6371e3; // Earth radius in meters\nvar baseSpeedKmPerHour = 70; // Base speed in km/h\nvar maxAcceleration = 2; // Maximum acceleration in m/s^2\nvar interval = 1000; // Interval in milliseconds (1 second)\n\n// Convert degrees to radians\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\n\n// Haversine formula to calculate distance between two points\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\n// Calculate the total distance\nvar totalDistance = haversine(startLat, startLon, stopLat, stopLon);\n\n// Convert wind direction from meteorological to mathematical (bearing)\nvar windDirectionRad = toRadians((270 - windDirection + 360) % 360);\n\n// Function to calculate the impact of wind on speed\nfunction adjustSpeedForWind(baseSpeed, windSpeed, windDirectionRad, travelDirectionRad) {\n    var windImpactX = windSpeed * Math.cos(windDirectionRad);\n    var windImpactY = windSpeed * Math.sin(windDirectionRad);\n\n    var travelImpactX = baseSpeed * Math.cos(travelDirectionRad);\n    var travelImpactY = baseSpeed * Math.sin(travelDirectionRad);\n\n    var resultingSpeedX = travelImpactX + windImpactX;\n    var resultingSpeedY = travelImpactY + windImpactY;\n\n    var resultingSpeed = Math.sqrt(resultingSpeedX * resultingSpeedX + resultingSpeedY * resultingSpeedY);\n    return resultingSpeed;\n}\n\n// Function to calculate travel direction in radians\nfunction calculateTravelDirection(lat1, lon1, lat2, lon2) {\n    var y = Math.sin(toRadians(lon2 - lon1)) * Math.cos(toRadians(lat2));\n    var x = Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -\n        Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(toRadians(lon2 - lon1));\n    return Math.atan2(y, x);\n}\n\n// Function to calculate speed at a given time\nfunction calculateSpeed(t, accelerationTime, decelerationTime, constantSpeedTime, baseSpeedKmPerHour, windSpeed, windDirectionRad, travelDirectionRad) {\n    var baseSpeedMetersPerSecond = baseSpeedKmPerHour * 1000 / 3600; // Convert km/h to m/s\n    var speed;\n\n    if (battery < 20) {\n        // If battery is below 20%, decelerate to 0\n        speed = flow.get(\"currentSpeed\") * battery / 40;\n    } else if (t <= accelerationTime) {\n        // Accelerating phase\n        speed = maxAcceleration * t;\n    } else if (t <= (accelerationTime + constantSpeedTime)) {\n        // Constant speed phase with slight fluctuation\n        var fluctuation = (Math.random() * 4 - 2); // Fluctuation between -2 and 2 km/h\n        var adjustedBaseSpeed = baseSpeedMetersPerSecond + fluctuation * (1000 / 3600); // Convert km/h to m/s\n        speed = adjustSpeedForWind(adjustedBaseSpeed, windSpeed, windDirectionRad, travelDirectionRad);\n    } else if (t <= (accelerationTime + constantSpeedTime + decelerationTime)) {\n        // Decelerating phase\n        speed = maxAcceleration * (accelerationTime + constantSpeedTime + decelerationTime - t);\n    } else {\n        // End of the journey\n        speed = 0;\n    }\n\n    var speedKmPerHour = speed * (3600 / 1000); // Convert m/s to km/h\n    return speedKmPerHour;\n}\n\n// Calculate the time required for each phase\nvar baseSpeedMetersPerSecond = baseSpeedKmPerHour * 1000 / 3600; // Convert km/h to m/s\nvar accelerationTime = baseSpeedMetersPerSecond / maxAcceleration; // Time to reach max speed\nvar accelerationDistance = 0.5 * maxAcceleration * accelerationTime * accelerationTime; // Distance covered during acceleration\nvar decelerationTime = accelerationTime; // Time to decelerate from max speed to 0\nvar decelerationDistance = accelerationDistance; // Distance covered during deceleration\nvar constantSpeedDistance = totalDistance - (accelerationDistance + decelerationDistance);\nvar constantSpeedTime = constantSpeedDistance / baseSpeedMetersPerSecond; // Time at constant speed\n\n// Function to calculate position at a given time\nfunction calculatePosition(t, totalTime) {\n    var fraction = t / totalTime;\n    var currentLat = startLat + fraction * (stopLat - startLat);\n    var currentLon = startLon + fraction * (stopLon - startLon);\n\n    var travelDirectionRad = calculateTravelDirection(startLat, startLon, stopLat, stopLon);\n    var currentSpeed = calculateSpeed(t, accelerationTime, decelerationTime, constantSpeedTime, baseSpeedKmPerHour, windSpeed, windDirectionRad, travelDirectionRad);\n\n    // Calculate distance travelled in this time step\n    var timeStep = interval / 1000; // Interval in seconds\n    var distanceTravelledKm = (currentSpeed * timeStep) / 3600; // Convert speed to distance in km\n\n    var remainingDistanceMeters = haversine(currentLat, currentLon, stopLat, stopLon);\n    var remainingDistanceKm = remainingDistanceMeters / 1000; // Convert meters to kilometers\n    var timeToDestinationSeconds = remainingDistanceMeters / (currentSpeed * 1000 / 3600); // Convert km/h to m/s\n\n    // Convert time to destination from seconds to days, hours, minutes, and seconds\n    var days = Math.floor(timeToDestinationSeconds / (3600 * 24));\n    var hours = Math.floor((timeToDestinationSeconds % (3600 * 24)) / 3600);\n    var minutes = Math.floor((timeToDestinationSeconds % 3600) / 60);\n    var seconds = Math.floor(timeToDestinationSeconds % 60);\n\n    return {\n        lat: currentLat,\n        lon: currentLon,\n        speed: currentSpeed,\n        remainingDistance: remainingDistanceKm,\n        distanceTravelled: totalDistance / 1000 - remainingDistanceKm,\n        timeToDestination: {\n            days: days,\n            hours: hours,\n            minutes: minutes,\n            seconds: seconds\n        },\n        reached: false\n    };\n}\n\n// Define a function to manage the navigation state and interval\nfunction startNavigation() {\n    // Clear any existing interval before starting a new one\n    var currentInterval = flow.get(\"currentInterval\");\n    if (currentInterval) {\n        clearTimeout(currentInterval);\n    }\n\n    // Calculate positions at intervals\n    var positions = [];\n    var totalTime = accelerationTime + constantSpeedTime + decelerationTime;\n    var timeStep = interval / 1000; // Time step in seconds\n    var currentTime = 0;\n\n    while (currentTime <= totalTime) {\n        var position = calculatePosition(currentTime, totalTime);\n        positions.push(position);\n        currentTime += timeStep;\n    }\n\n    // Function to publish positions with delay\n    function publishPositions(positions) {\n        var i = 0;\n        function publishPosition() {\n            if (i < positions.length) {\n                if (i === positions.length - 1) {\n                    positions[i].reached = true; // Set reached to true when the last position is reached\n                }\n                node.send({ payload: positions[i] });\n                i++;\n                currentInterval = setTimeout(publishPosition, interval); // Delay between each publish\n                flow.set(\"currentInterval\", currentInterval);\n\n                // Check battery level dynamically\n                var battery = flow.get(\"batteryLevel\") || 100; // Get current battery level\n                if (battery < 10) {\n                    // Send final stop message if battery is below 10%\n                    positions[i].reached = true; // Mark as reached if battery is critically low\n                    node.send({ payload: positions[i] });\n                    clearTimeout(currentInterval); // Stop further updates\n                }\n            } else {\n                // Send final stop message\n                node.send({ payload: { lat: stopLat, lon: stopLon, speed: 0, remainingDistance: 0, distanceTravelled: totalDistance / 1000, timeToDestination: { days: 0, hours: 0, minutes: 0, seconds: 0 }, reached: true } });\n                flow.set(\"reached\", true);;\n            }\n        }\n\n        publishPosition();\n    }\n\n    // Start publishing positions\n    publishPositions(positions);\n}\n\n// Start the navigation process\nstartNavigation();\n\n// Return null to prevent immediate sending of the original message\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 480,
+        "wires": [
+            [
+                "bd14306b099f29a4"
+            ]
+        ]
+    },
+    {
+        "id": "0a39f028a6648c82",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link_waypoint1",
+        "mode": "link",
+        "links": [
+            "5e08518df1780845",
+            "6e410b890f021ea9",
+            "d168ee3326e5f8c9",
+            "d54aa8144d6cff65",
+            "e0895a99b746ee57",
+            "e8911115464a4ad0"
+        ],
+        "x": 395,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "5e08518df1780845",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 1",
+        "links": [
+            "0a39f028a6648c82",
+            "9b1edf5dcf550952",
+            "f1460e3856d2a965",
+            "d497c2023f0f3d85"
+        ],
+        "x": 435,
+        "y": 180,
+        "wires": [
+            [
+                "6b6d61e9bc08a5ff"
+            ]
+        ]
+    },
+    {
+        "id": "d168ee3326e5f8c9",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 2",
+        "links": [
+            "0a39f028a6648c82",
+            "9b1edf5dcf550952",
+            "fb5bc04bb0da99ea",
+            "d497c2023f0f3d85"
+        ],
+        "x": 485,
+        "y": 220,
+        "wires": [
+            [
+                "07aefac10fc78c60"
+            ]
+        ]
+    },
+    {
+        "id": "e0895a99b746ee57",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 3",
+        "links": [
+            "0a39f028a6648c82",
+            "9b1edf5dcf550952",
+            "fb5bc04bb0da99ea",
+            "d497c2023f0f3d85"
+        ],
+        "x": 505,
+        "y": 260,
+        "wires": [
+            [
+                "78dfb92efdd75068"
+            ]
+        ]
+    },
+    {
+        "id": "6e410b890f021ea9",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 4",
+        "links": [
+            "0a39f028a6648c82",
+            "48e2b8b5c84f320a"
+        ],
+        "x": 105,
+        "y": 660,
+        "wires": [
+            [
+                "94f65f775d8619f0"
+            ]
+        ]
+    },
+    {
+        "id": "e8911115464a4ad0",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 5",
+        "links": [
+            "0a39f028a6648c82",
+            "9b1edf5dcf550952",
+            "fb5bc04bb0da99ea",
+            "d497c2023f0f3d85"
+        ],
+        "x": 455,
+        "y": 480,
+        "wires": [
+            [
+                "c7147e670387d3ca",
+                "3b8b789af682c50c"
+            ]
+        ]
+    },
+    {
+        "id": "9b1edf5dcf550952",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link_waypoint2",
+        "mode": "link",
+        "links": [
+            "5e08518df1780845",
+            "b284a80b5bd88936",
+            "d168ee3326e5f8c9",
+            "e0895a99b746ee57",
+            "e8911115464a4ad0"
+        ],
+        "x": 1485,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "bd14306b099f29a4",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link_path",
+        "mode": "link",
+        "links": [
+            "03ecb33658a0820a",
+            "05851e3821c3ba23",
+            "08cf8dab2ff6b7ba",
+            "0ac36e71cf6d9eeb",
+            "0df82ecff5f2f48e",
+            "18b29d8801ef4730",
+            "569630c62666d5f8",
+            "d9df93c7e8c7aa60",
+            "eee73b618f357426",
+            "45722b521d374e16",
+            "9f366a75ea13f1b3"
+        ],
+        "x": 695,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "03ecb33658a0820a",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 6",
+        "links": [
+            "bd14306b099f29a4"
+        ],
+        "x": 455,
+        "y": 440,
+        "wires": [
+            [
+                "f365390ca32b4d3e"
+            ]
+        ]
+    },
+    {
+        "id": "569630c62666d5f8",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 7",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 745,
+        "y": 420,
+        "wires": [
+            [
+                "a51d5378f83c49ea"
+            ]
+        ]
+    },
+    {
+        "id": "d9df93c7e8c7aa60",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 8",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 745,
+        "y": 480,
+        "wires": [
+            [
+                "175cd74d21f0895c"
+            ]
+        ]
+    },
+    {
+        "id": "18b29d8801ef4730",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 9",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 745,
+        "y": 520,
+        "wires": [
+            [
+                "f58a7116cbcc44a8"
+            ]
+        ]
+    },
+    {
+        "id": "0ac36e71cf6d9eeb",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 10",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 745,
+        "y": 560,
+        "wires": [
+            [
+                "9b156828fad4a8d9"
+            ]
+        ]
+    },
+    {
+        "id": "0df82ecff5f2f48e",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 11",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 585,
+        "y": 600,
+        "wires": [
+            [
+                "3b57ae7a8668ec3e"
+            ]
+        ]
+    },
+    {
+        "id": "05851e3821c3ba23",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 12",
+        "links": [
+            "bd14306b099f29a4"
+        ],
+        "x": 225,
+        "y": 760,
+        "wires": [
+            [
+                "5db9d049a690fc24"
+            ]
+        ]
+    },
+    {
+        "id": "08cf8dab2ff6b7ba",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 13",
+        "links": [
+            "12b1ef1d72af20a6",
+            "bd14306b099f29a4"
+        ],
+        "x": 745,
+        "y": 640,
+        "wires": [
+            [
+                "estimateDistance"
+            ]
+        ]
+    },
+    {
+        "id": "c57a083ff9dc073e",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link_map",
+        "links": [
+            "085dd0e0035eb286",
+            "0eceab140571df90",
+            "c56262f2b35dd2a4",
+            "f4639620844443fd",
+            "4b7dcd081fedefdc"
+        ],
+        "x": 1075,
+        "y": 120,
+        "wires": [
+            [
+                "e0ec963913cbf7a9"
+            ]
+        ]
+    },
+    {
+        "id": "085dd0e0035eb286",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "c57a083ff9dc073e"
+        ],
+        "x": 1115,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "0eceab140571df90",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "c57a083ff9dc073e"
+        ],
+        "x": 1155,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "c56262f2b35dd2a4",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "c57a083ff9dc073e"
+        ],
+        "x": 1105,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "f4639620844443fd",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "c57a083ff9dc073e"
+        ],
+        "x": 985,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "3b8b789af682c50c",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "gradual path v2",
+        "func": "// Extract the initial starting point\nvar start = flow.get(\"startpos\") || { lat: 0, lon: 0 };\nflow.set(\"navtime\",0);\n// Extract waypoints from flow context\nvar waypoints = flow.get(\"tableData\") || [];\nif (waypoints.length < 1) {\n    return null; // Not enough waypoints to navigate\n}\n\nvar battery = flow.get(\"batteryLevel\") || 100; // Default battery level if not set\n\n// Constants\nvar R = 6371e3; // Earth's radius in meters\nvar baseSpeedKmPerHour = 70; // Base speed in km/h\nvar maxAcceleration = 2; // Maximum acceleration in m/s^2\nvar interval = 1000; // Interval in milliseconds (1 second)\n\n// Convert degrees to radians\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\n\n// Convert radians to degrees\nfunction toDegrees(radians) {\n    return radians * 180 / Math.PI;\n}\n\n// Haversine formula to calculate distance between two points\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\n// Adjust speed for wind impact\nfunction adjustSpeedForWind(baseSpeed, windSpeed, windDirectionRad, travelDirectionRad) {\n    var windImpactX = windSpeed * Math.cos(windDirectionRad);\n    var windImpactY = windSpeed * Math.sin(windDirectionRad);\n\n    var travelImpactX = baseSpeed * Math.cos(travelDirectionRad);\n    var travelImpactY = baseSpeed * Math.sin(travelDirectionRad);\n\n    var resultingSpeedX = travelImpactX + windImpactX;\n    var resultingSpeedY = travelImpactY + windImpactY;\n\n    return Math.sqrt(resultingSpeedX * resultingSpeedX + resultingSpeedY * resultingSpeedY);\n}\n\n// Calculate the travel direction in radians\nfunction calculateTravelDirection(lat1, lon1, lat2, lon2) {\n    var y = Math.sin(toRadians(lon2 - lon1)) * Math.cos(toRadians(lat2));\n    var x = Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -\n        Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(toRadians(lon2 - lon1));\n    return Math.atan2(y, x);\n}\n\n// Calculate the bearing between two points\nfunction calculateBearing(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var y = Math.sin(Δλ) * Math.cos(φ2);\n    var x = Math.cos(φ1) * Math.sin(φ2) -\n        Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);\n\n    var θ = Math.atan2(y, x);\n    var bearing = (toDegrees(θ) + 360) % 360; // Normalize to 0-360 degrees\n    return bearing;\n}\n\n// Function to calculate speed at a given time\nfunction calculateSpeed(t, accelerationTime, decelerationTime, constantSpeedTime, baseSpeedKmPerHour, windSpeed, windDirectionRad, travelDirectionRad) {\n    var baseSpeedMetersPerSecond = baseSpeedKmPerHour * 1000 / 3600; // Convert km/h to m/s\n    var speed;\n\n    if (battery < 20) {\n        // If battery is below 20%, decelerate to 0\n        speed = flow.get(\"currentSpeed\") * battery / 40;\n    } else if (t <= accelerationTime) {\n        // Accelerating phase\n        speed = maxAcceleration * t;\n    } else if (t <= (accelerationTime + constantSpeedTime)) {\n        // Constant speed phase with slight fluctuation\n        var fluctuation = (Math.random() * 4 - 2); // Fluctuation between -2 and 2 km/h\n        var adjustedBaseSpeed = baseSpeedMetersPerSecond + fluctuation * (1000 / 3600); // Convert km/h to m/s\n        speed = adjustSpeedForWind(adjustedBaseSpeed, windSpeed, windDirectionRad, travelDirectionRad);\n    } else if (t <= (accelerationTime + constantSpeedTime + decelerationTime)) {\n        // Decelerating phase\n        speed = maxAcceleration * (accelerationTime + constantSpeedTime + decelerationTime - t);\n    } else {\n        // End of the journey\n        speed = 0;\n    }\n\n    var speedKmPerHour = speed * (3600 / 1000); // Convert m/s to km/h\n    return speedKmPerHour;\n}\n\n// Function to calculate the time required for each phase\nfunction calculatePhaseTimes(totalDistance, baseSpeedKmPerHour, maxAcceleration) {\n    var baseSpeedMetersPerSecond = baseSpeedKmPerHour * 1000 / 3600;\n    var accelerationTime = baseSpeedMetersPerSecond / maxAcceleration;\n    var accelerationDistance = 0.5 * maxAcceleration * accelerationTime * accelerationTime;\n    var decelerationTime = accelerationTime;\n    var decelerationDistance = accelerationDistance;\n    var constantSpeedDistance = totalDistance - (accelerationDistance + decelerationDistance);\n    var constantSpeedTime = constantSpeedDistance / baseSpeedMetersPerSecond;\n    return { accelerationTime, decelerationTime, constantSpeedTime };\n}\n\n// Calculate position at time t\nfunction calculatePosition(t, startLat, startLon, stopLat, stopLon, totalTime, windSpeed, windDirectionRad, segment) {\n    var fraction = t / totalTime;\n    var currentLat = startLat + fraction * (stopLat - startLat);\n    var currentLon = startLon + fraction * (stopLon - startLon);\n\n    var travelDirectionRad = calculateTravelDirection(startLat, startLon, stopLat, stopLon);\n    var bearing = calculateBearing(startLat, startLon, stopLat, stopLon);\n    var { accelerationTime, decelerationTime, constantSpeedTime } = calculatePhaseTimes(haversine(startLat, startLon, stopLat, stopLon), baseSpeedKmPerHour, maxAcceleration);\n    var currentSpeed = calculateSpeed(t, accelerationTime, decelerationTime, constantSpeedTime, baseSpeedKmPerHour, windSpeed, windDirectionRad, travelDirectionRad);\n\n    var timeStep = interval / 1000; // Time step in seconds\n    var distanceTravelledKm = (currentSpeed * timeStep) / 3600;\n\n    var remainingDistanceMeters = haversine(currentLat, currentLon, stopLat, stopLon);\n    var remainingDistanceKm = remainingDistanceMeters / 1000;\n    var timeToDestinationSeconds = remainingDistanceMeters / (currentSpeed * 1000 / 3600);\n\n    var days = Math.floor(timeToDestinationSeconds / (3600 * 24));\n    var hours = Math.floor((timeToDestinationSeconds % (3600 * 24)) / 3600);\n    var minutes = Math.floor((timeToDestinationSeconds % 3600) / 60);\n    var seconds = Math.floor(timeToDestinationSeconds % 60);\n\n    return {\n        lat: currentLat,\n        lon: currentLon,\n        speed: currentSpeed,\n        remainingDistance: remainingDistanceKm,\n        distanceTravelled: haversine(startLat, startLon, stopLat, stopLon) / 1000 - remainingDistanceKm,\n        timeToDestination: {\n            days: days,\n            hours: hours,\n            minutes: minutes,\n            seconds: seconds\n        },\n        bearing: bearing,\n        reached: false,\n        Itinerary: {\n            segment: segment,\n            start: { lat: startLat, lon: startLon },\n            end: { lat: stopLat, lon: stopLon },\n            distance: haversine(startLat, startLon, stopLat, stopLon) / 1000\n        }\n    };\n}\n\n// Define a function to manage the navigation state and interval\nfunction startNavigation() {\n    // Clear any existing interval before starting a new one\n    var currentInterval = flow.get(\"currentInterval\");\n    if (currentInterval) {\n        clearTimeout(currentInterval);\n    }\n\n    // Calculate positions at intervals\n    var positions = [];\n    var totalDistance = 0;\n\n    for (var i = 0; i < waypoints.length - 1; i++) {\n        var startLat = waypoints[i].lat;\n        var startLon = waypoints[i].lon;\n        var stopLat = waypoints[i + 1].lat;\n        var stopLon = waypoints[i + 1].lon;\n\n        var segmentDistance = haversine(startLat, startLon, stopLat, stopLon);\n        totalDistance += segmentDistance;\n\n        var { accelerationTime, decelerationTime, constantSpeedTime } = calculatePhaseTimes(segmentDistance, baseSpeedKmPerHour, maxAcceleration);\n        var totalTime = accelerationTime + constantSpeedTime + decelerationTime;\n        var timeStep = interval / 1000; // Time step in seconds\n        var currentTime = 0;\n        // Extract wind data from message payload\n        var wind = flow.get(\"wind\");\n        var windSpeed = wind.speed || 0; // in m/s\n        var windDirection = wind.direction || 0; // in meteorological degrees\n\n        while (currentTime <= totalTime) {\n            var position = calculatePosition(currentTime, startLat, startLon, stopLat, stopLon, totalTime, windSpeed, toRadians((270 - windDirection + 360) % 360), i);\n            positions.push(position);\n            currentTime += timeStep;\n        }\n    }\n\n    // Function to publish positions with delay\n    function publishPositions(positions) {\n        var i = 0;\n        function publishPosition() {\n            var battery = flow.get(\"batteryLevel\") || 100; // Get current battery level\n            if (battery > 10) {\n                if (i < positions.length) {\n                    // Determine the reached status based on waypoints\n                    var reachedStatus = false;\n                    if (i === positions.length - 1) {\n                        reachedStatus = \"endpoint\";\n                    } else {\n                        for (var wp = 0; wp < waypoints.length; wp++) {\n                            if (positions[i].lat === waypoints[wp].lat && positions[i].lon === waypoints[wp].lon && waypoints[wp].charge) {\n                                reachedStatus = \"charge\";\n                                break;\n                            }\n                        }\n                    }\n                    positions[i].reached = reachedStatus;\n\n                    node.send({ payload: positions[i] });\n                    flow.set(\"currentSegment\", positions[i].Itinerary.segment); // Publish the current segment to the flow\n                    i++;\n                    flow.set(\"currentInterval\", setTimeout(publishPosition, interval));\n                }\n            } else {\n                node.send({ payload: { lat: flow.get(\"currentLat\"), lon: flow.get(\"currentLon\"), speed: 0, remainingDistance: 0, distanceTravelled: totalDistance / 1000, timeToDestination: { days: 0, hours: 0, minutes: 0, seconds: 0 }, reached: false } });\n                flow.set(\"currentInterval\", null);\n            }\n        }\n        publishPosition();\n    }\n\n    publishPositions(positions);\n}\n\n// Start navigation\nstartNavigation();\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 520,
+        "wires": [
+            [
+                "bd14306b099f29a4",
+                "78a763357c2b132d"
+            ]
+        ]
+    },
+    {
+        "id": "78a763357c2b132d",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "group": "cd81d08b.eebb3",
+        "name": "",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Itinerary Information</title>\n    <style>\n        .info-container {\n            background-color: #fff;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            text-align: center;\n            width: 300px;\n            margin: 20px auto;\n        }\n\n        .info-container h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n        }\n\n        .info-item {\n            margin-bottom: 15px;\n        }\n\n        .info-label {\n            font-weight: bold;\n            display: block;\n            margin-bottom: 5px;\n        }\n\n        .info-value {\n            font-size: 18px;\n            display: inline-block;\n            margin-left: 5px;\n        }\n    </style>\n</head>\n\n<body ng-app=\"myApp\" ng-controller=\"myController\">\n    <div class=\"info-container\">\n        <h1>Itinerary Information</h1>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Start Point:</span>\n            <span class=\"info-value\" id=\"start-point\">{{ msg.payload.Itinerary.start.lat }} lat, {{ msg.payload.Itinerary.start.lon }} lon</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">End Point:</span>\n            <span class=\"info-value\" id=\"end-point\">{{ msg.payload.Itinerary.end.lat }} lat, {{ msg.payload.Itinerary.end.lon }} lon</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Total Distance (km):</span>\n            <span class=\"info-value\" id=\"distance\">{{ msg.payload.Itinerary.distance }}</span>\n        </div>\n    </div>\n\n    <!-- AngularJS Script -->\n    <script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js\"></script>\n    <script>\n        angular.module('myApp', [])\n            .controller('myController', function($scope) {\n                // Example payload values (replace with actual values from your application)\n                $scope.msg = {\n                    payload: {\n                        segments: [\n                            {\n                                start: {\n                                    lat: 37.7749,\n                                    lon: -122.4194\n                                },\n                                end: {\n                                    lat: 34.0522,\n                                    lon: -118.2437\n                                },\n                                distance: 560000 // distance in meters\n                            }\n                        ]\n                    }\n                };\n\n                // Assuming currentSegment is always 0 for this example\n                $scope.currentSegment = 0;\n            });\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 580,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b284a80b5bd88936",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 14",
+        "links": [
+            "6444b65ea35c664b",
+            "9b1edf5dcf550952",
+            "c97abb3adeb950f4",
+            "d497c2023f0f3d85"
+        ],
+        "x": 1225,
+        "y": 1000,
+        "wires": [
+            [
+                "0bc21f70cc7fa22c",
+                "5a55685f7ec20442"
+            ]
+        ]
+    },
+    {
+        "id": "5a55685f7ec20442",
+        "type": "ui_table",
+        "z": "2a4177a67e8704e1",
+        "group": "8d85ce6915be4d69",
+        "name": "",
+        "order": 1,
+        "width": "6",
+        "height": "4",
+        "columns": [],
+        "outputs": 1,
+        "cts": true,
+        "x": 1310,
+        "y": 880,
+        "wires": [
+            [
+                "618d0ba58fb7f8d1",
+                "011c23fc5b7484d6",
+                "13aa46186b5466ca"
+            ]
+        ]
+    },
+    {
+        "id": "13056819bc12ef3e",
+        "type": "ui_form",
+        "z": "2a4177a67e8704e1",
+        "name": "waypoint",
+        "label": "",
+        "group": "8d85ce6915be4d69",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Waypoint lat and lon",
+                "value": "waypoint",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "waypoint": ""
+        },
+        "payload": "",
+        "submit": "Add point",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 1300,
+        "y": 820,
+        "wires": [
+            [
+                "4cc9296b127c0a90"
+            ]
+        ]
+    },
+    {
+        "id": "4cc9296b127c0a90",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 1",
+        "func": "// Initialize or retrieve the existing table data from flow context\nlet tableData = flow.get(\"tableData\") || [];\n\nvar payload = msg.payload;\nvar posCoords = payload.waypoint.split(',');\nvar posLat = parseFloat(posCoords[0].trim());\nvar posLon = parseFloat(posCoords[1].trim());\n\n// Create an object for the new waypoint\nlet newWaypoint = {\n    point: (tableData.length - 1).toString(), // Dynamic point number starting from 1\n    lat: posLat,\n    lon: posLon,\n    charge: false\n};\n\n// Insert the new waypoint before the last entry (\"end\" point)\ntableData.splice(tableData.length - 1, 0, newWaypoint);\n\n// Update the point identifiers dynamically\nfor (let i = 1; i < tableData.length - 1; i++) {\n    tableData[i].point = i.toString();\n}\n\n// Update the flow context with the new table data\nflow.set(\"tableData\", tableData);\n\nmsg.payload = tableData\n// Return the updated tableData (optional, for debugging or further use)\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1480,
+        "y": 820,
+        "wires": [
+            [
+                "c97abb3adeb950f4"
+            ]
+        ]
+    },
+    {
+        "id": "011c23fc5b7484d6",
+        "type": "ui_button",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "group": "8d85ce6915be4d69",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Remove",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "removewaypoint",
+        "payloadType": "flow",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1320,
+        "y": 920,
+        "wires": [
+            [
+                "6ff286058c577e6b"
+            ]
+        ]
+    },
+    {
+        "id": "618d0ba58fb7f8d1",
+        "type": "ui_text",
+        "z": "2a4177a67e8704e1",
+        "group": "8d85ce6915be4d69",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Remove Waypoint",
+        "format": "{{msg.payload.point}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1490,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "13aa46186b5466ca",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "removewaypoint",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1510,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6ff286058c577e6b",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 2",
+        "func": "// Retrieve the table data from the flow context\nlet tableData = flow.get(\"tableData\") || [];\n\n// Retrieve the point identifier to be removed from the message payload\nlet removePoint = msg.payload.point;\n\n// Remove the specified point from the tableData\ntableData = tableData.filter(entry => entry.point !== removePoint);\n\n// Update the flow context with the new table data\nflow.set(\"tableData\", tableData);\n\nmsg.payload = tableData\n// Return the updated tableData (optional, for debugging or further use)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1320,
+        "y": 960,
+        "wires": [
+            [
+                "6444b65ea35c664b"
+            ]
+        ]
+    },
+    {
+        "id": "0bc21f70cc7fa22c",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tableData[0].lat",
+                "pt": "flow",
+                "to": "currentlat",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "tableData[0].lon",
+                "pt": "flow",
+                "to": "currentlon",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "currentSegment",
+                "pt": "flow",
+                "to": "-1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1440,
+        "y": 1000,
+        "wires": [
+            [
+                "fb5bc04bb0da99ea"
+            ]
+        ]
+    },
+    {
+        "id": "fb5bc04bb0da99ea",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link_waypoint3",
+        "mode": "link",
+        "links": [
+            "d168ee3326e5f8c9",
+            "e0895a99b746ee57",
+            "e8911115464a4ad0",
+            "eee73b618f357426"
+        ],
+        "x": 1565,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "8569d720dade6f90",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 5",
+        "func": "// Initialize or retrieve the existing table data from flow context\nlet tableData = flow.get(\"tableData\") || [];\n\n// Create an object for the new waypoint\nlet newWaypoint = {\n    point: flow.get(\"navigate_to.id\"),\n    lat: flow.get(\"navigate_to.lat\"),\n    lon: flow.get(\"navigate_to.lon\"),\n    charge: true\n};\n\n// Insert the new waypoint before the last entry (\"end\" point)\ntableData.splice(tableData.length - 1, 0, newWaypoint);\n\n// Update the point identifiers dynamically\n\n// Update the flow context with the new table data\nflow.set(\"tableData\", tableData);\n\nmsg.payload = tableData\n// Return the updated tableData (optional, for debugging or further use)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1360,
+        "y": 780,
+        "wires": [
+            [
+                "9b1edf5dcf550952"
+            ]
+        ]
+    },
+    {
+        "id": "71169b9122c424ea",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 6",
+        "func": "// Get the previous segment from the context storage\nvar previousSegment = context.get('previousSegment');\n\n// Get the current segment from the payload\nvar currentSegment = flow.get(\"currentSegment\");\n\n// Check if the segment has changed\nif (previousSegment !== currentSegment) {\n    // Segment has changed, so update the context storage with the new segment\n    context.set('previousSegment', currentSegment);\n    \n    // Send the message payload indicating a segment change\n    node.send({ payload: msg.payload });\n} else {\n    // If the segment hasn't changed, don't send a message\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 520,
+        "wires": [
+            [
+                "b9d14e36842c1b8b"
+            ]
+        ]
+    },
+    {
+        "id": "time-simulator",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "Simulate Time",
+        "func": "var interval = 1 / 3600; // 1 second interval in hours\nvar amp = msg.payload;\nif (context.get('time') === undefined) {\n    context.set('time', 0);\n}\nvar time = context.get('time');\ntime += interval;\ncontext.set('time', time);\nmsg.payload = {\n     time:time,\n     amp: amp\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 380,
+        "wires": [
+            [
+                "calculate-soc"
+            ]
+        ]
+    },
+    {
+        "id": "calculate-soc",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "Calculate SOC",
+        "func": "var capacity = 25; // Battery capacity in Ah\nvar current = msg.payload.amp; // Discharge current in A\nvar time = msg.payload.time; // Time in hours\n\n// Peukert's Law simplified model\nvar soc = flow.get(\"batteryLevel\") || 100; // Retrieve the previous SOC or start at 100%\nvar discharge = current * time;\nvar newSoc = soc - (discharge / capacity * 100);\n\n// Ensure SOC is between 0 and 100\nnewSoc = newSoc < 0 ? 0 : newSoc;\nnewSoc = newSoc > 100 ? 100 : newSoc;\n\nflow.set(\"batteryLevel\", newSoc);\nmsg.payload = newSoc;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 380,
+        "wires": [
+            [
+                "26bb6f7cebb8cd6b",
+                "ba66398c67a84164"
+            ]
+        ]
+    },
+    {
+        "id": "1b4837fae850f1a8",
+        "type": "range",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "minin": "0",
+        "maxin": "72",
+        "minout": "0",
+        "maxout": "4",
+        "action": "clamp",
+        "round": false,
+        "property": "payload",
+        "name": "",
+        "x": 580,
+        "y": 380,
+        "wires": [
+            [
+                "time-simulator",
+                "a3f4e12f1fde281d"
+            ]
+        ]
+    },
+    {
+        "id": "a3f4e12f1fde281d",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "name": "function 7",
+        "func": "var capacity = 2.25; // Battery capacity in Ah\nvar soc = flow.get(\"soc\"); // SOC from the context or payload\nvar current = msg.payload; // Current drawn in A\n\n// Calculate remaining capacity\nvar remaining_capacity = (capacity * soc) / 100; // in Ah\n\n// Estimate discharge time\nvar remaining_time_hours = remaining_capacity / current; // in hours\n\n// Convert remaining time to minutes and seconds\nvar remaining_time_minutes = Math.floor(remaining_time_hours * 60);\nvar remaining_time_seconds = Math.floor((remaining_time_hours * 3600) % 60);\n\nmsg.payload = {\n    time: {\n        remainingTimeMinutes: remaining_time_minutes,\n        remainingTimeSeconds: remaining_time_seconds\n    },\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c97abb3adeb950f4",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 5",
+        "mode": "link",
+        "links": [
+            "b284a80b5bd88936"
+        ],
+        "x": 1575,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "6444b65ea35c664b",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [
+            "b284a80b5bd88936"
+        ],
+        "x": 1435,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "8c955d2ccb02b28e",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 8",
+        "func": "msg.payload = flow.get(\"tableData\")\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "920cde1a84b77b56"
+            ]
+        ]
+    },
+    {
+        "id": "920cde1a84b77b56",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 7",
+        "mode": "link",
+        "links": [
+            "fc55625e4a9987ec"
+        ],
+        "x": 365,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "fc55625e4a9987ec",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 15",
+        "links": [
+            "920cde1a84b77b56",
+            "48e2b8b5c84f320a"
+        ],
+        "x": 1215,
+        "y": 880,
+        "wires": [
+            [
+                "5a55685f7ec20442"
+            ]
+        ]
+    },
+    {
+        "id": "9be7b64076193a77",
+        "type": "delay",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 990,
+        "y": 720,
+        "wires": [
+            [
+                "c56262f2b35dd2a4"
+            ]
+        ]
+    },
+    {
+        "id": "90df27b3f056bb5b",
+        "type": "delay",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1050,
+        "y": 920,
+        "wires": [
+            [
+                "0eceab140571df90"
+            ]
+        ]
+    },
+    {
+        "id": "310b569a5f452504",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "predictive",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1150,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2cd172c5037d983d",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "Path Planner",
+        "func": "// Function to calculate the distance between two points using Haversine formula\nfunction calculateDistance(lat1, lon1, lat2, lon2) {\n    const R = 6371; // Radius of the Earth in km\n    const dLat = (lat2 - lat1) * (Math.PI / 180);\n    const dLon = (lon2 - lon1) * (Math.PI / 180);\n    const a =\n        Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    return R * c; // Distance in km\n}\n\n// Function to calculate the segment distances of a path\nfunction calculateSegmentDistances(path) {\n    const segmentDistances = [];\n    for (let i = 0; i < path.length - 1; i++) {\n        const distance = calculateDistance(path[i].lat, path[i].lon, path[i + 1].lat, path[i + 1].lon);\n        segmentDistances.push(distance);\n    }\n    return segmentDistances;\n}\n\n// Function to calculate distance from the start and end for each point in the path\nfunction calculateDistancesFromStartAndEnd(path, start, end) {\n    const distances = path.map(point => {\n        return {\n            id: point.id,\n            distanceFromStart: calculateDistance(start.lat, start.lon, point.lat, point.lon),\n            distanceFromEnd: calculateDistance(end.lat, end.lon, point.lat, point.lon)\n        };\n    });\n    return distances;\n}\n\n// Function to generate all possible paths with exactly one intermediate station\nfunction generatePaths(start, end, stations) {\n    const paths = [];\n\n    // Generate paths with one intermediate station\n    stations.forEach(station => {\n        paths.push([start, station, end]);\n    });\n\n    return paths;\n}\n\n// Input data (Make sure these are correctly populated)\n// Example data\nconst start = flow.get(\"currentLoc\");\nconst end = flow.get(\"endpos\");\nstart.id = \"start\";\nend.id = \"end\";\nconst stations = flow.get(\"stationlist\");\n\n// Generate paths with exactly one intermediate station\nconst allPaths = generatePaths(start, end, stations);\n\n// Format paths with path1, path2, etc.\nconst formattedPaths = {};\nallPaths.forEach((path, index) => {\n    const pathKey = `path${index + 1}`;\n    const segmentDistances = calculateSegmentDistances(path);\n    const distances = calculateDistancesFromStartAndEnd(path, start, end);\n    formattedPaths[pathKey] = {\n        path: path.map(p => p.id),\n        distances: distances,\n        segmentDistances: segmentDistances\n    };\n});\n\n// Prepare nodes and edges for output\nconst nodes = [\n    { \"id\": \"start\", \"label\": \"Start\", \"group\": \"start\", \"title\": `Start Position\\n(${start.lat}, ${start.lon})` },\n    { \"id\": \"end\", \"label\": \"End\", \"group\": \"end\", \"title\": `End Position\\n(${end.lat}, ${end.lon})` }\n];\n\nstations.forEach(station => {\n    nodes.push({\n        \"id\": station.id,\n        \"label\": `Station ${station.id}`,\n        \"group\": \"station\",\n        \"title\": `Station ${station.id}\\n(${station.lat}, ${station.lon})`\n    });\n});\n\nconst edges = [];\nObject.values(formattedPaths).forEach((pathObj, pathIndex) => {\n    const path = pathObj.path;\n    for (let i = 0; i < path.length - 1; i++) {\n        edges.push({\n            \"from\": path[i],\n            \"to\": path[i + 1],\n            \"label\": `Path ${pathIndex + 1}`\n        });\n    }\n});\n\n\n// Return the formatted paths with distances\nreturn { payload: { nodes, edges, paths: formattedPaths } };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 560,
+        "wires": [
+            [
+                "f9d4df47c53f84b1"
+            ]
+        ]
+    },
+    {
+        "id": "8877ae95b37ec60b",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 13",
+        "func": "// Constants\nvar threshold = 3; // Threshold for distance stabilization in km\nvar stableCount = 15; // Number of consecutive readings within the threshold to consider stable\n\n// Retrieve the previous distances from the flow context\nvar previousDistances = flow.get('previousDistances') || [];\n\n// Check if we have enough data points to determine stability\nif (previousDistances.length < stableCount) {\n    msg.payload = \"Not enough data points to determine stability.\";\n    return msg;\n}\n\n// Remove oldest distance if we have more than needed\nif (previousDistances.length > stableCount) {\n    previousDistances.shift();\n}\n\n// Check if the distance is stabilizing\nvar isStable = previousDistances.every((distance, index, arr) => Math.abs(distance - arr[0]) < threshold);\n\n// Prepare the payload with stability status\nmsg.payload = {\n    stable: isStable ? \"stable\" : \"unstable\"\n};\n\n// Update the flow context with the trimmed distances\nflow.set('previousDistances', previousDistances);\nflow.set('stability', msg.payload.stable)\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 600,
+        "wires": [
+            [
+                "fa354a34b1bea467"
+            ]
+        ]
+    },
+    {
+        "id": "fa354a34b1bea467",
+        "type": "switch",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "property": "payload.stable",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "stable",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 640,
+        "wires": [
+            [
+                "25a00ac25622cdc7"
+            ]
+        ]
+    },
+    {
+        "id": "1b0391584a4e281e",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 14",
+        "func": "// Get previousDistances array from flow context\nvar dist = flow.get(\"previousDistances\");\n\n// Calculate the mean of the distances\nvar sum = dist.reduce(function (acc, num) {\n    return acc + num;\n}, 0);\n\nvar mean = sum / dist.length;\n\n// Get travelData array from flow context\nlet travelData = flow.get('travelData') || [];\nvar l = travelData.length;\n\n// Ensure there is at least one element in travelData before setting discharged distance\nif (l > 0) {\n    travelData[l-1].dischargedistance = mean;\n    flow.set('travelData', travelData); // Save updated travelData back to flow context\n}\n\n// Output the result\nflow.set(\"mindist\", mean);\nmsg.payload = mean;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 520,
+        "wires": [
+            [
+                "2cd172c5037d983d"
+            ]
+        ]
+    },
+    {
+        "id": "038c76055fec782f",
+        "type": "trigger",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "op1": "stability",
+        "op2": "",
+        "op1type": "flow",
+        "op2type": "nul",
+        "duration": "0",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "ms",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 1480,
+        "y": 600,
+        "wires": [
+            [
+                "1b0391584a4e281e"
+            ]
+        ]
+    },
+    {
+        "id": "f9d4df47c53f84b1",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 15",
+        "func": "var maxDistance = flow.get(\"mindist\") - 1;\n\nfunction calculateDistance(lat1, lon1, lat2, lon2) {\n    const R = 6371; // Radius of the Earth in km\n    const dLat = (lat2 - lat1) * (Math.PI / 180);\n    const dLon = (lon2 - lon1) * (Math.PI / 180);\n    const a =\n        Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    return R * c; // Distance in km\n}\n\nfunction getClosestStation(payload, maxDistance) {\n    let validStations = [];\n\n    for (let pathKey in payload.paths) {\n        let path = payload.paths[pathKey];\n        let distances = path.distances;\n\n        for (let i = 1; i < distances.length - 1; i++) { // Skip start and end\n            let station = distances[i];\n            let distanceFromStart = station.distanceFromStart;\n\n            if (distanceFromStart < maxDistance) {\n                let distanceToEnd = station.distanceFromEnd;\n                let startToEndReduction = distances[0].distanceFromEnd - distanceToEnd;\n                let efficiency = startToEndReduction / distanceFromStart;\n\n                validStations.push({\n                    id: station.id,\n                    efficiency: efficiency,\n                    distanceFromEnd: distanceToEnd\n                });\n            }\n        }\n    }\n\n    // Sort valid stations by efficiency in descending order (higher efficiency is better)\n    validStations.sort((a, b) => b.efficiency - a.efficiency);\n\n    // Choose the station with the highest efficiency and then the smallest distanceFromEnd if efficiencies are equal\n    if (validStations.length > 0) {\n        return validStations[0].id;\n    } else {\n        return null;\n    }\n}\n\nvar curr = flow.get(\"currentLoc\");\nvar end = flow.get(\"endpos\");\nvar dist = calculateDistance(curr.lat, curr.lon, end.lat, end.lon);\nconst stationId = getClosestStation(msg.payload, maxDistance);\n\nif (dist > maxDistance) {\n    if (stationId) {\n        msg.payload = { station: stationId };\n        return msg;\n    } else {\n        return null;\n    }\n} else {\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 580,
+        "wires": [
+            [
+                "2a44041f111763c4"
+            ]
+        ]
+    },
+    {
+        "id": "c15078c90aef7470",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "d": true,
+        "group": "3e6193cafb3c14ea",
+        "name": "",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Route Planner</title>\n    <script type=\"text/javascript\" src=\"https://unpkg.com/vis-network/standalone/umd/vis-network.min.js\"></script>\n    <style>\n        #mynetwork {\n            width: 100%;\n            height: 600px;\n            border: 1px solid lightgray;\n        }\n\n        #routes {\n            margin: 20px 0;\n        }\n\n        .button-container {\n            display: flex;\n            justify-content: space-between;\n            margin: 10px 0;\n        }\n\n        .button-container button {\n            padding: 10px 20px;\n        }\n    </style>\n</head>\n\n<body>\n    <h1>Route Planner</h1>\n    <button onclick=\"showRoutes()\">Show Routes</button>\n    <div class=\"button-container\">\n        <button onclick=\"previousPath()\">&#9664; Previous Path</button>\n        <button onclick=\"nextPath()\">Next Path &#9654;</button>\n    </div>\n    <div id=\"mynetwork\"></div>\n    <div id=\"routes\"></div>\n\n    <script>\n        let msgPayload = {}; // Initialize an empty msgPayload\n\n        // Current path index and all paths\n        let currentPathIndex = 0;\n        let allPaths = [];\n\n        // Function to handle incoming data from Node-RED\n        function handleData(data) {\n            msgPayload = data.payload;\n            allPaths = extractPaths();\n            renderPath(currentPathIndex);\n        }\n\n        // Extract paths from the msg.payload data\n        function extractPaths() {\n            const paths = [];\n            const edges = msgPayload.edges || [];\n\n            edges.forEach(edge => {\n                const pathIndex = parseInt(edge.label.split(' ')[1]) - 1;\n                if (!paths[pathIndex]) {\n                    paths[pathIndex] = new Set();\n                }\n                paths[pathIndex].add(edge.from + '-' + edge.to);\n            });\n\n            return paths;\n        }\n\n        // Render the current path with color differentiation\n        function renderPath(pathIndex) {\n            const container = document.getElementById('mynetwork');\n            const pathEdges = allPaths[pathIndex] || new Set();\n\n            // Filter edges to include only those in the current path\n            const filteredEdges = (msgPayload.edges || []).filter(edge => {\n                const edgeId = edge.from + '-' + edge.to;\n                return pathEdges.has(edgeId);\n            }).map(edge => {\n                return {\n                    ...edge,\n                    color: 'red', // Current path in red\n                    width: 3 // Increase width of the current path\n                };\n            });\n\n            // Filter nodes to include only those connected by the current path\n            const connectedNodes = new Set();\n            filteredEdges.forEach(edge => {\n                connectedNodes.add(edge.from);\n                connectedNodes.add(edge.to);\n            });\n\n            const filteredNodes = (msgPayload.nodes || []).filter(node => connectedNodes.has(node.id)).map(node => {\n                const nodeId = node.id;\n                const isEnd = nodeId === 'end';\n                const isStart = nodeId === 'start'; // Check if the node is the start node\n\n                return {\n                    ...node,\n                    color: isStart ? 'orange' : isEnd ? 'yellow' : 'green' // Highlight start node in orange, end node in yellow, stations in green\n                };\n            });\n\n            const data = {\n                nodes: new vis.DataSet(filteredNodes),\n                edges: new vis.DataSet(filteredEdges)\n            };\n            const options = {\n                nodes: {\n                    shape: 'dot',\n                    size: 16\n                },\n                edges: {\n                    width: 2\n                },\n                physics: {\n                    stabilization: false\n                }\n            };\n            container.innerHTML = ''; // Clear previous graph\n            new vis.Network(container, data, options);\n        }\n\n        // Show previous path\n        function previousPath() {\n            if (currentPathIndex > 0) {\n                currentPathIndex--;\n                renderPath(currentPathIndex);\n            }\n        }\n\n        // Show next path\n        function nextPath() {\n            if (currentPathIndex < allPaths.length - 1) {\n                currentPathIndex++;\n                renderPath(currentPathIndex);\n            }\n        }\n\n        // Show all routes initially\n        function showRoutes() {\n            renderPath(currentPathIndex);\n        }\n\n        // Listen for incoming data from Node-RED\n        (function(scope) {\n            scope.$watch('msg', function(msg) {\n                if (msg) {\n                    handleData(msg);\n                }\n            });\n        })(scope);\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1020,
+        "y": 1120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a44041f111763c4",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 16",
+        "func": "// Define the station list\nconst stationlist = flow.get(\"stationlist\");\nlet tableData = flow.get(\"tableData\") || [];\n\n// Example ID to match\nconst matchId = msg.payload.station;\n\n// Function to find station by ID\nfunction findStationById(id) {\n    return stationlist.find(station => station.id === id);\n}\n\n// Find the station with the specified ID\nconst matchedStation = findStationById(matchId);\n\n\nlet newWaypoint = {\n    point: matchedStation.id,\n    lat: matchedStation.lat,\n    lon: matchedStation.lon,\n    charge:true\n};\n\n// Insert the new waypoint before the last entry (\"end\" point)\ntableData.splice(tableData.length - 1, 0, newWaypoint);\n\n\n// Update the flow context with the new table data\nflow.set(\"tableData\", tableData);\n\nmsg.payload = tableData\n// Return the updated tableData (optional, for debugging or further use)\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 640,
+        "wires": [
+            [
+                "d497c2023f0f3d85"
+            ]
+        ]
+    },
+    {
+        "id": "d497c2023f0f3d85",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link_waypoint2",
+        "mode": "link",
+        "links": [
+            "5e08518df1780845",
+            "b284a80b5bd88936",
+            "d168ee3326e5f8c9",
+            "e0895a99b746ee57",
+            "e8911115464a4ad0"
+        ],
+        "x": 1935,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "5c8c3e1a83d0acb9",
+        "type": "switch",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "property": "payload.reached",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "charge",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "endpoint",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 130,
+        "y": 440,
+        "wires": [
+            [
+                "b7855297fd93978b"
+            ],
+            [
+                "ddd687e1168468de"
+            ]
+        ]
+    },
+    {
+        "id": "f201367cb1567280",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "batteryLevel",
+                "pt": "flow",
+                "to": "100",
+                "tot": "num"
+            },
+            {
+                "t": "delete",
+                "p": "batteryLevelT1",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "previousDistances",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "stability",
+                "pt": "flow"
+            },
+            {
+                "t": "set",
+                "p": "navtime",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "4cae3499b07e6137"
+            ]
+        ]
+    },
+    {
+        "id": "72784dac3afe6d2e",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 17",
+        "func": "// Get the table data from the flow context\nvar tableData = flow.get(\"tableData\");\n\n// Find the index of the \"start\" point\nvar startIndex = tableData.findIndex(item => item.point === \"start\");\n\nif (startIndex !== -1 && startIndex + 1 < tableData.length) {\n    // Remove the point immediately after \"start\"\n    tableData.splice(startIndex + 1, 1);\n}\n\n// Store the updated table data back in the flow context\nflow.set(\"tableData\", tableData);\n\n// Return the updated table data\nmsg.payload = tableData;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 340,
+        "wires": [
+            [
+                "48e2b8b5c84f320a"
+            ]
+        ]
+    },
+    {
+        "id": "48e2b8b5c84f320a",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 8",
+        "mode": "link",
+        "links": [
+            "fc55625e4a9987ec",
+            "6e410b890f021ea9"
+        ],
+        "x": 415,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6b6d61e9bc08a5ff",
+        "type": "trigger",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "op1": "1",
+        "op2": "0",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "-10",
+        "extend": true,
+        "overrideDelay": false,
+        "units": "min",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 570,
+        "y": 180,
+        "wires": [
+            [
+                "b7458c18e966981e"
+            ]
+        ]
+    },
+    {
+        "id": "e458080c7c686860",
+        "type": "switch",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "property": "stability",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "stable",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "stable",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1270,
+        "y": 500,
+        "wires": [
+            [
+                "d78e6911d63dce7a"
+            ],
+            [
+                "9313d8d5bd78a87d"
+            ]
+        ]
+    },
+    {
+        "id": "d78e6911d63dce7a",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "reset",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "delete",
+                "p": "mindist",
+                "pt": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1440,
+        "y": 500,
+        "wires": [
+            [
+                "50510b92bde18580"
+            ]
+        ]
+    },
+    {
+        "id": "9313d8d5bd78a87d",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 18",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 540,
+        "wires": [
+            [
+                "e458080c7c686860"
+            ]
+        ]
+    },
+    {
+        "id": "183aa2b4550dceab",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 19",
+        "func": "var start = flow.get(\"start\");\nvar end = flow.get(\"endpos\");\nfunction calculateDistance(lat1, lon1, lat2, lon2) {\n    const R = 6371; // Radius of the Earth in km\n    const dLat = (lat2 - lat1) * (Math.PI / 180);\n    const dLon = (lon2 - lon1) * (Math.PI / 180);\n    const a =\n        Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *\n        Math.sin(dLon / 2) * Math.sin(dLon / 2);\n    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n    return R * c; // Distance in km\n}\nmsg.payload = { \"lat\": end.lat, \"lon\": end.lon, \"speed\": 0, \"remainingDistance\": 0, \"distanceTravelled\": calculateDistance(start.lat, start.lon, end.lat, end.lon), \"timeToDestination\": { \"days\": 0, \"hours\": 0, \"minutes\": 0, \"seconds\": 0 }, \"bearing\": 0, \"reached\": true, \"Itinerary\": { \"segment\": 0, \"start\": { \"lat\": start.lat, \"lon\": start.lon }, \"end\": { \"lat\": end.lat, \"lon\": end.lon }, \"distance\": calculateDistance(start.lat,start.lon,end.lat,end.lon) } }\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 440,
+        "wires": [
+            [
+                "12b1ef1d72af20a6"
+            ]
+        ]
+    },
+    {
+        "id": "12b1ef1d72af20a6",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 9",
+        "mode": "link",
+        "links": [
+            "569630c62666d5f8",
+            "d9df93c7e8c7aa60",
+            "18b29d8801ef4730",
+            "0ac36e71cf6d9eeb",
+            "0df82ecff5f2f48e",
+            "08cf8dab2ff6b7ba"
+        ],
+        "x": 395,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d54aa8144d6cff65",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 16",
+        "links": [
+            "25a00ac25622cdc7",
+            "50510b92bde18580",
+            "0a39f028a6648c82"
+        ],
+        "x": 1335,
+        "y": 600,
+        "wires": [
+            [
+                "038c76055fec782f"
+            ]
+        ]
+    },
+    {
+        "id": "25a00ac25622cdc7",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 10",
+        "mode": "link",
+        "links": [
+            "d54aa8144d6cff65"
+        ],
+        "x": 1365,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "50510b92bde18580",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 11",
+        "mode": "link",
+        "links": [
+            "d54aa8144d6cff65"
+        ],
+        "x": 1555,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "d9772ec75f1e42aa",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 17",
+        "links": [
+            "4cae3499b07e6137"
+        ],
+        "x": 1175,
+        "y": 460,
+        "wires": [
+            [
+                "e458080c7c686860"
+            ]
+        ]
+    },
+    {
+        "id": "4cae3499b07e6137",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 12",
+        "mode": "link",
+        "links": [
+            "d9772ec75f1e42aa"
+        ],
+        "x": 475,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "eee73b618f357426",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 18",
+        "links": [
+            "bd14306b099f29a4",
+            "fb5bc04bb0da99ea"
+        ],
+        "x": 185,
+        "y": 520,
+        "wires": [
+            [
+                "71169b9122c424ea"
+            ]
+        ]
+    },
+    {
+        "id": "df0d7409efa78baa",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 19",
+        "links": [
+            "b9d14e36842c1b8b"
+        ],
+        "x": 665,
+        "y": 140,
+        "wires": [
+            [
+                "b7458c18e966981e"
+            ]
+        ]
+    },
+    {
+        "id": "b9d14e36842c1b8b",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 13",
+        "mode": "link",
+        "links": [
+            "df0d7409efa78baa"
+        ],
+        "x": 465,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "e3368a5da5cd52e0",
+        "type": "link out",
+        "z": "2a4177a67e8704e1",
+        "name": "link out 14",
+        "mode": "link",
+        "links": [
+            "7014274fc1af8a6c"
+        ],
+        "x": 1035,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7014274fc1af8a6c",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 20",
+        "links": [
+            "e3368a5da5cd52e0"
+        ],
+        "x": 1215,
+        "y": 720,
+        "wires": [
+            [
+                "5594545384d9f6fe"
+            ]
+        ]
+    },
+    {
+        "id": "45722b521d374e16",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 21",
+        "links": [
+            "bd14306b099f29a4"
+        ],
+        "x": 45,
+        "y": 440,
+        "wires": [
+            [
+                "5c8c3e1a83d0acb9"
+            ]
+        ]
+    },
+    {
+        "id": "8891eecd68c9faa2",
+        "type": "change",
+        "z": "2a4177a67e8704e1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "wind.speed",
+                "pt": "flow",
+                "to": "payload.windspeed",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "wind.direction",
+                "pt": "flow",
+                "to": "payload.winddirection",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0e517ba2a4913a0",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 20",
+        "func": "var timeinSeconds = flow.get(\"navtime\");\ntimeinSeconds = timeinSeconds + 1;  // Increment time by 1 second\n\n// Calculate days, hours, minutes, and seconds from the elapsed time\nvar days = Math.floor(timeinSeconds / (3600 * 24));\nvar hours = Math.floor((timeinSeconds % (3600 * 24)) / 3600);\nvar minutes = Math.floor((timeinSeconds % 3600) / 60);\nvar seconds = Math.floor(timeinSeconds % 60);\n\n// Get the last average speed from the flow context\nvar lastAvgSpeed = flow.get(\"avgspeed\") || 0;\n\n// Calculate average speed in km/h if distance travelled is available\nvar avgspeed = lastAvgSpeed;  // Initialize with last average speed\nif (msg.payload && msg.payload.distanceTravelled) {\n    var distanceTravelled = msg.payload.distanceTravelled;  // Distance in kilometers\n    var timeInHours = timeinSeconds / 3600;  // Convert time from seconds to hours\n    avgspeed = distanceTravelled / timeInHours;  // Average speed in km/h\n    \n    // Update the flow context with the new average speed\n    flow.set(\"avgspeed\", avgspeed);\n} else if (avgspeed === 0) {\n    // If no new distance data and average speed is still 0, keep the last value\n    avgspeed = lastAvgSpeed;\n    flow.set(\"avgspeed\", lastAvgSpeed);\n}\n\n// Prepare the payload with calculated values\nmsg.payload = {\n    days: days,\n    hours: hours,\n    minutes: minutes,\n    seconds: seconds,\n    avgspeed: avgspeed\n};\n\n// Update the flow context with the new time\nflow.set(\"navtime\", timeinSeconds);\n\n// Return the message object with updated payload\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 20,
+        "wires": [
+            [
+                "cb511a3cf9c4e0de"
+            ]
+        ]
+    },
+    {
+        "id": "9f366a75ea13f1b3",
+        "type": "link in",
+        "z": "2a4177a67e8704e1",
+        "name": "link in 22",
+        "links": [
+            "bd14306b099f29a4"
+        ],
+        "x": 605,
+        "y": 20,
+        "wires": [
+            [
+                "f0e517ba2a4913a0"
+            ]
+        ]
+    },
+    {
+        "id": "cb511a3cf9c4e0de",
+        "type": "ui_template",
+        "z": "2a4177a67e8704e1",
+        "group": "86715ccb8ff014c4",
+        "name": "",
+        "order": 3,
+        "width": "6",
+        "height": "7",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Battery Information</title>\n    <style>\n        .info-container {\n            background-color: #fff;\n            padding: 20px;\n            border-radius: 8px;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n            text-align: center;\n            width: 300px;\n            margin: 20px auto;\n            /* Centering the container */\n        }\n\n        .info-container h1 {\n            font-size: 24px;\n            margin-bottom: 20px;\n        }\n\n        .info-item {\n            margin-bottom: 15px;\n        }\n\n        .info-label {\n            font-weight: bold;\n            display: block;\n            margin-bottom: 5px;\n        }\n\n        .info-value {\n            font-size: 18px;\n            display: inline-block;\n            margin-left: 5px;\n        }\n    </style>\n</head>\n\n<body ng-app=\"myApp\" ng-controller=\"myController\">\n    <div class=\"info-container\">\n        <h1>Nav Time</h1>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Duration:</span>\n            <span class=\"info-value\" id=\"duration\">{{ msg.payload.days }} days {{ msg.payload.hours }} hours {{ msg.payload.minutes }} minutes {{ msg.payload.seconds }} seconds</span>\n        </div>\n        <div class=\"info-item\">\n            <span class=\"info-label\">Avg Speed:</span>\n            <span class=\"info-value\" id=\"duration\">{{ msg.payload.avgspeed }} kmph</span>\n        </div>\n    </div>\n\n    <!-- AngularJS Script -->\n    <script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js\"></script>\n    <script>\n        angular.module('myApp', [])\n            .controller('myController', function($scope) {\n                // Example payload values (replace with actual values from your application)\n                $scope.msg = {\n                    payload: {\"time\":{\"remainingTimeMinutes\":0,\"remainingTimeSeconds\":0},\"distance\":0}\n                };\n            });\n    </script>\n</body>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 920,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b7855297fd93978b",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 21",
+        "func": "// Retrieve existing travelData from flow context\nlet travelData = flow.get('travelData') || [];\nvar l = travelData.length;\nvar R = 6371e3;\n\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\n\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\n// Get the table data from the flow context\nlet tableData = flow.get(\"tableData\") || [];\nvar t = flow.get(\"navtime\") || 0;\nvar days = Math.floor(t / (3600 * 24));\nvar hours = Math.floor((t % (3600 * 24)) / 3600);\nvar minutes = Math.floor((t % 3600) / 60);\nvar seconds = Math.floor(t % 60);\n\n// Find the index of the \"start\" point\nlet startIndex = tableData.findIndex(item => item.point === \"start\");\nif (startIndex !== -1 && startIndex + 1 < tableData.length) {\n    // Retrieve the data from the next index\n    let data = tableData[startIndex + 1];\n    var dist = haversine(travelData[l - 1].lat, travelData[l - 1].lon, data.lat, data.lon);\n    \n    // Fetch the wind data for the new entry\n    let windData = flow.get(\"wind\"); // This should be specific to the new entry\n\n    // New data to be added\n    let newData = {\n        \"point\": data.point,\n        \"lat\": data.lat,\n        \"lon\": data.lon,\n        \"duration\": {\n            \"days\": days,\n            \"hours\": hours,\n            \"minutes\": minutes,\n            \"seconds\": seconds\n        },\n        \"avgspeed\": flow.get(\"avgspeed\") || 0,\n        \"distance\": dist / 1000,\n        \"wind\": windData, // Use the wind data fetched\n        \"batteryleft\": flow.get(\"batteryLevel\")\n    };\n\n    // Add new data to the existing array\n    travelData.push(newData);\n\n    // Store the updated array back to flow context\n    flow.set('travelData', travelData);\n\n    // Return the updated travelData as the message payload\n    msg.payload = travelData;\n} else {\n    // If startIndex is not found or next index is out of bounds, log an error\n    msg.payload = \"No valid data found to add.\";\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 110,
+        "y": 360,
+        "wires": [
+            [
+                "72784dac3afe6d2e",
+                "f201367cb1567280",
+                "0436480823a0a692"
+            ]
+        ]
+    },
+    {
+        "id": "0436480823a0a692",
+        "type": "debug",
+        "z": "2a4177a67e8704e1",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "ddd687e1168468de",
+        "type": "function",
+        "z": "2a4177a67e8704e1",
+        "name": "function 22",
+        "func": "var end = flow.get(\"endpos\");\nlet travelData = flow.get('travelData') || [];\nvar l = travelData.length;\n\nvar R = 6371e3;\nfunction toRadians(degrees) {\n    return degrees * Math.PI / 180;\n}\nfunction haversine(lat1, lon1, lat2, lon2) {\n    var φ1 = toRadians(lat1);\n    var φ2 = toRadians(lat2);\n    var Δφ = toRadians(lat2 - lat1);\n    var Δλ = toRadians(lon2 - lon1);\n\n    var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +\n        Math.cos(φ1) * Math.cos(φ2) *\n        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);\n\n    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));\n\n    var d = R * c; // Distance in meters\n    return d;\n}\n\nlet windData = flow.get(\"wind\");\n\n\n// Ensure there is at least one previous travel data point to calculate the duration\nvar d = flow.get(\"navtime\");\n\n\nvar avgspeed = msg.payload.distanceTravelled * 3600 / d;\nvar dist = msg.payload.distanceTravelled;\n\nvar days = Math.floor(d / (3600 * 24));\nvar hours = Math.floor((d % (3600 * 24)) / 3600);\nvar minutes = Math.floor((d % 3600) / 60);\nvar seconds = Math.floor(d % 60);\nvar disttrav = haversine(travelData[l - 1].lat, travelData[l - 1].lon,end.lat,end.lon)\nlet newData = {\n    \"point\": \"end\",\n    \"lat\": end.lat,\n    \"lon\": end.lon,\n    \"duration\": {\n        \"days\": days,\n        \"hours\": hours,\n        \"minutes\": minutes,\n        \"seconds\": seconds\n    },\n    \"avgspeed\": avgspeed,\n    \"distance\": disttrav/1000,\n    \"wind\": windData,\n    \"batteryleft\": flow.get(\"batteryLevel\"),\n};\n\n// Add new data to the existing array\ntravelData.push(newData);\n\n// Store the updated array back to flow context\nflow.set('travelData', travelData);\n\n// Return the updated travelData as the message payload\nmsg.payload = travelData;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 500,
+        "wires": [
+            [
+                "183aa2b4550dceab",
+                "0436480823a0a692"
+            ]
+        ]
+    },
+    {
+        "id": "cd81d08b.eebb3",
+        "type": "ui_group",
+        "z": "2a4177a67e8704e1",
+        "name": "Path Planner",
+        "tab": "3a8ca5f4.05522a",
+        "order": 1,
+        "disp": true,
+        "width": "7",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "983409115f72e744",
+        "type": "ui_group",
+        "name": "Map",
+        "tab": "3a8ca5f4.05522a",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "21ad9c2888924593",
+        "type": "ui_group",
+        "name": "Analytics",
+        "tab": "3a8ca5f4.05522a",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bf2a2839ae2fcfd2",
+        "type": "ui_group",
+        "name": "Charging Stations",
+        "tab": "3a8ca5f4.05522a",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "07a538afbb49a06b",
+        "type": "ui_group",
+        "name": "Predective Analytics",
+        "tab": "3a8ca5f4.05522a",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8d85ce6915be4d69",
+        "type": "ui_group",
+        "name": "Waypoints",
+        "tab": "3a8ca5f4.05522a",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3e6193cafb3c14ea",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "a3ab0c4c55fb62b1",
+        "order": 1,
+        "disp": true,
+        "width": "15",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "86715ccb8ff014c4",
+        "type": "ui_group",
+        "name": "Nav Time ",
+        "tab": "3a8ca5f4.05522a",
+        "order": 8,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3a8ca5f4.05522a",
+        "type": "ui_tab",
+        "name": "Final UAV Dashboard",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "a3ab0c4c55fb62b1",
+        "type": "ui_tab",
+        "name": "Tab 2",
+        "icon": "dashboard",
+        "order": 2
+    }
+]
